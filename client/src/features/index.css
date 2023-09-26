@@ -1,0 +1,79 @@
+table,
+th,
+td {
+  border: 1px solid black;
+}
+
+.cardBox {
+  display: table-row;
+}
+.modalStyle {
+  padding: 5px;
+  background-color: goldenrod;
+  margin-top: 1%;
+  margin-bottom: 25%;
+  margin-left: 25%;
+  margin-right: 25%;
+}
+
+.white {
+  height: 35px;
+  width: 35px;
+  background-color: rgb(215, 207, 207);
+  border-radius: 50%;
+  border-style: solid;
+  text-align: center;
+}
+.blue {
+  height: 35px;
+  width: 35px;
+  background-color: rgb(31, 31, 190);
+  border-radius: 50%;
+  color: white;
+  border-style: solid;
+  border-color: black;
+  text-align: center;
+}
+.green {
+  height: 35px;
+  width: 35px;
+  background-color: rgb(10, 107, 10);
+  border-radius: 50%;
+  color: white;
+  border-color: black;
+  border-style: solid;
+  text-align: center;
+}
+.red {
+  height: 35px;
+  width: 35px;
+  background-color: rgb(214, 23, 23);
+  border-radius: 50%;
+  border-style: solid;
+  text-align: center;
+}
+.black {
+  height: 35px;
+  width: 35px;
+  background-color: rgba(0, 0, 0, 0.868);
+  border-radius: 50%;
+  color: white;
+  border-style: solid;
+  text-align: center;
+}
+.pearl {
+  height: 35px;
+  width: 35px;
+  background-color: rgba(255, 192, 203, 0.887);
+  border-radius: 50%;
+  border-style: solid;
+  text-align: center;
+}
+.gold {
+  height: 35px;
+  width: 35px;
+  background-color: rgb(232, 208, 72);
+  border-radius: 50%;
+  border-style: solid;
+  text-align: center;
+}

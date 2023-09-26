@@ -1,0 +1,793 @@
+[
+  {
+    "3": [
+      {
+        "color": "black",
+        "points": 3,
+        "crowns": 2,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 3,
+          "green": 5,
+          "red": 3,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "black",
+        "points": 4,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 2,
+          "red": 2,
+          "black": 6
+        }
+      },
+      {
+        "color": "green",
+        "points": 4,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "blue": 2,
+          "red": 2,
+          "green": 6
+        }
+      },
+      {
+        "color": "green",
+        "points": 3,
+        "crowns": 2,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 5,
+          "blue": 3,
+          "red": 3,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "white",
+        "points": 4,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "blue": 2,
+          "black": 2,
+          "white": 6
+        }
+      },
+      {
+        "color": "white",
+        "points": 3,
+        "crowns": 2,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "blue": 3,
+          "red": 5,
+          "black": 3,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 0,
+        "crowns": 3,
+        "quantity": 1,
+        "special": "wild",
+        "requirements": {
+          "black": 8
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 3,
+        "crowns": 0,
+        "quantity": 1,
+        "special": ["wild", "again"],
+        "requirements": {
+          "red": 8
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 6,
+        "crowns": 0,
+        "quantity": 0,
+        "special": "none",
+        "requirements": {
+          "white": 8
+        }
+      },
+      {
+        "color": "red",
+        "points": 3,
+        "crowns": 2,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "blue": 5,
+          "green": 3,
+          "black": 3,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "red",
+        "points": 4,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "green": 2,
+          "black": 2,
+          "red": 6
+        }
+      },
+      {
+        "color": "blue",
+        "points": 4,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 2,
+          "blue": 6,
+          "green": 2
+        }
+      },
+      {
+        "color": "blue",
+        "points": 3,
+        "crowns": 2,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 3,
+          "pearl": 1,
+          "black": 5,
+          "green": 3
+        }
+      }
+    ]
+  },
+  {
+    "2": [
+      {
+        "color": "blue",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 2,
+        "special": "none",
+        "requirements": {
+          "green": 5,
+          "red": 2
+        }
+      },
+      {
+        "color": "blue",
+        "points": 2,
+        "crowns": 1,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 5,
+          "red": 2,
+          "black": 2,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "blue",
+        "points": 2,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "scroll",
+        "requirements": {
+          "white": 2,
+          "blue": 4,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "blue",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "steal",
+        "requirements": {
+          "green": 4,
+          "black": 3
+        }
+      },
+      {
+        "color": "white",
+        "points": 2,
+        "crowns": 1,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "green": 2,
+          "red": 2,
+          "black": 2,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "white",
+        "points": 2,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "scroll",
+        "requirements": {
+          "white": 4,
+          "black": 2,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "white",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 2,
+        "special": "none",
+        "requirements": {
+          "blue": 5,
+          "green": 2
+        }
+      },
+      {
+        "color": "white",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "steal",
+        "requirements": {
+          "blue": 4,
+          "red": 3
+        }
+      },
+      {
+        "color": "black",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 2,
+        "special": "none",
+        "requirements": {
+          "white": 5,
+          "blue": 2
+        }
+      },
+      {
+        "color": "black",
+        "points": 2,
+        "crowns": 1,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "blue": 2,
+          "green": 2,
+          "red": 2,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "black",
+        "points": 2,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "scroll",
+        "requirements": {
+          "red": 2,
+          "black": 4,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "black",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "steal",
+        "requirements": {
+          "white": 4,
+          "green": 3
+        }
+      },
+      {
+        "color": "green",
+        "points": 2,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "scroll",
+        "requirements": {
+          "blue": 2,
+          "green": 4,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "green",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 2,
+        "special": "none",
+        "requirements": {
+          "red": 5,
+          "black": 2
+        }
+      },
+      {
+        "color": "green",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "steal",
+        "requirements": {
+          "white": 3,
+          "red": 4
+        }
+      },
+      {
+        "color": "green",
+        "points": 2,
+        "crowns": 1,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 2,
+          "blue": 2,
+          "black": 2,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "red",
+        "points": 2,
+        "crowns": 1,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 2,
+          "blue": 2,
+          "green": 2,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "red",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 2,
+        "special": "none",
+        "requirements": {
+          "white": 2,
+          "black": 5
+        }
+      },
+      {
+        "color": "red",
+        "points": 2,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "scroll",
+        "requirements": {
+          "green": 2,
+          "red": 4,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "red",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "steal",
+        "requirements": {
+          "blue": 3,
+          "black": 4
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 0,
+        "crowns": 2,
+        "quantity": 1,
+        "special": "wild",
+        "requirements": {
+          "green": 6,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 0,
+        "crowns": 2,
+        "quantity": 1,
+        "special": "wild",
+        "requirements": {
+          "blue": 6,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 5,
+        "crowns": 0,
+        "quantity": 0,
+        "special": "none",
+        "requirements": {
+          "blue": 6,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 2,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "wild",
+        "requirements": {
+          "green": 6,
+          "pearl": 1
+        }
+      }
+    ]
+  },
+  {
+    "1": [
+      {
+        "color": "blue",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "again",
+        "requirements": {
+          "green": 2,
+          "red": 2,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "blue",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "gem",
+        "requirements": {
+          "white": 2,
+          "black": 2
+        }
+      },
+      {
+        "color": "blue",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "red": 2,
+          "black": 3
+        }
+      },
+      {
+        "color": "blue",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "green": 1,
+          "red": 1,
+          "white": 1,
+          "black": 1
+        }
+      },
+      {
+        "color": "blue",
+        "points": 0,
+        "crowns": 1,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "green": 3
+        }
+      },
+      {
+        "color": "green",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 3,
+          "black": 2
+        }
+      },
+      {
+        "color": "green",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "again",
+        "requirements": {
+          "red": 2,
+          "black": 2,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "green",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "red": 1,
+          "black": 1,
+          "white": 1,
+          "blue": 1
+        }
+      },
+      {
+        "color": "green",
+        "points": 0,
+        "crowns": 1,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "red": 3
+        }
+      },
+      {
+        "color": "green",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "gem",
+        "requirements": {
+          "white": 2,
+          "blue": 2
+        }
+      },
+      {
+        "color": "black",
+        "points": 0,
+        "crowns": 1,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 3
+        }
+      },
+      {
+        "color": "black",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "gem",
+        "requirements": {
+          "green": 2,
+          "red": 2
+        }
+      },
+      {
+        "color": "black",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 1,
+          "blue": 1,
+          "green": 1,
+          "red": 1
+        }
+      },
+      {
+        "color": "black",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "blue": 2,
+          "green": 3
+        }
+      },
+      {
+        "color": "black",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "again",
+        "requirements": {
+          "white": 2,
+          "blue": 2,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "red",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 2,
+          "blue": 3
+        }
+      },
+      {
+        "color": "red",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "white": 1,
+          "blue": 1,
+          "green": 1,
+          "black": 1
+        }
+      },
+      {
+        "color": "red",
+        "points": 0,
+        "crowns": 1,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "black": 3
+        }
+      },
+      {
+        "color": "red",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "again",
+        "requirements": {
+          "white": 2,
+          "black": 2,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "red",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "gem",
+        "requirements": {
+          "green": 2,
+          "blue": 2
+        }
+      },
+      {
+        "color": "white",
+        "points": 0,
+        "crowns": 1,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "blue": 3
+        }
+      },
+      {
+        "color": "white",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "black": 1,
+          "blue": 1,
+          "green": 1,
+          "red": 1
+        }
+      },
+      {
+        "color": "white",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "again",
+        "requirements": {
+          "blue": 2,
+          "green": 2,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "white",
+        "points": 0,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "gem",
+        "requirements": {
+          "red": 2,
+          "black": 2
+        }
+      },
+      {
+        "color": "white",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "none",
+        "requirements": {
+          "green": 2,
+          "red": 3
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "wild",
+        "requirements": {
+          "black": 4,
+
+          "pearl": 1
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 3,
+        "crowns": 0,
+        "quantity": 0,
+        "special": "none",
+        "requirements": {
+          "red": 4,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "wild",
+        "requirements": {
+          "black": 1,
+          "blue": 2,
+          "pearl": 1,
+          "red": 2
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 0,
+        "crowns": 1,
+        "quantity": 1,
+        "special": "wild",
+        "requirements": {
+          "white": 4,
+          "pearl": 1
+        }
+      },
+      {
+        "color": "colorless",
+        "points": 1,
+        "crowns": 0,
+        "quantity": 1,
+        "special": "wild",
+        "requirements": {
+          "white": 2,
+          "black": 1,
+          "green": 2,
+          "pearl": 1
+        }
+      }
+    ]
+  }
+]

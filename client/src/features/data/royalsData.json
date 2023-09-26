@@ -1,0 +1,6 @@
+[
+  { "points": 2, "special": "steal", "image": ">:)" },
+  { "points": 2, "special": "again", "image": ":)" },
+  { "points": 2, "special": "scroll", "image": ":B" },
+  { "points": 3, "special": "none", "image": ":D" }
+]
