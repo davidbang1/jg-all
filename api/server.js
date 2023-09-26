@@ -13,8 +13,11 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.get("/", (req, res) => {
-  // res.send("hello");
   res.redirect(`/${uuidV4()}`);
+});
+
+app.get("/test", (req, res) => {
+  res.send("Welcome to Game!");
 });
 
 app.get("/:room", (req, res) => {
@@ -37,4 +40,6 @@ app.post("/", (req, res) => {
   }
 });
 
-server.listen(8000);
+server.listen(8000, () => {
+  console.log("Server started on port 8000");
+});

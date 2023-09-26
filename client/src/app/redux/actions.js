@@ -13,3 +13,12 @@ export const testBackend = (password) => async (dispatch) => {
     return response.data
   }
 }
+
+export const titleTest = () => async (dispatch) => {
+  const response = await axios.get(baseURL + "test/", { headers: myHeader })
+  if (response.status === 200) {
+    return response.data
+  } else {
+    return "failed"
+  }
+}

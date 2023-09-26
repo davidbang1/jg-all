@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react"
-import { testBackend } from "../../app/redux/actions"
+import { testBackend, titleTest } from "../../app/redux/actions"
 import { useDispatch } from "react-redux"
 
 export function Home() {
   const [input, setInput] = useState("")
   const [input2, setInput2] = useState("")
-
+  const [testData, setTestData] = useState("Backend Not Connected")
   const dispatch = useDispatch()
 
   function sendCode() {
@@ -15,9 +15,14 @@ export function Home() {
   function test() {
     //connect to api
   }
+  useEffect(() => {
+    dispatch(titleTest()).then((response) => {
+      setTestData(response)
+    })
+  }, [])
   return (
     <div style={{ padding: "20%" }}>
-      Please Join or Create a room
+      {testData}
       <br />
       <input
         id="send"
