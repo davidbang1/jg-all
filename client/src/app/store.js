@@ -8,7 +8,7 @@ import scrollReducer from "../features/game/scrollSlice"
 import cardReducer from "../features/game/cardSlice"
 import cardsReducer from "../features/game/cardsSlice"
 import royalReducer from "../features/game/royalSlice"
-import homeReducer from "../features/newGame/homeSlice"
+import homeReducer from "../features/pages/homeSlice"
 
 export const store = configureStore({
   reducer: {
