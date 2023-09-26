@@ -8,8 +8,13 @@ import { PlayerTwo } from "../game/PlayerTwo"
 import { Cards } from "../game/Cards"
 import { Scrolls } from "../game/Scrolls"
 import { Royals } from "../game/Royals"
+import useScript from "../../app/hooks/useScript"
 
 export function JewelDuel(props) {
+  useScript("https://unpkg.com/peerjs@1.5.0/dist/peerjs.min.js")
+  useScript("/socket.io/socket.io.js")
+  // create new peer in here
+
   return (
     <div className="App">
       <header className="App-header">

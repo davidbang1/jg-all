@@ -1,3 +1,5 @@
+import Peer from "peerjs"
+import { socket } from "../../app/hooks/socket"
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {

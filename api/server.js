@@ -1,5 +1,5 @@
 require("dotenv").config();
-
+const { ExpressPeerServer } = require("peer");
 const express = require("express");
 const app = express();
 const server = require("http").Server(app);
@@ -12,22 +12,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-  res.redirect(`/${uuidV4()}`);
-});
-
 app.get("/test", (req, res) => {
   res.send("Welcome to Game!");
 });
 
-app.get("/:room", (req, res) => {
-  res.render("index", { roomId: req.params.room });
+app.get("/getRoom", (req, res) => {
+  res.send(uuidV4());
 });
 
 io.on("connection", (socket) => {
+  //works
   socket.on("join-room", (roomId, userId) => {
     socket.join(roomId);
-    socket.broadcast.to(roomId).emit("user-connected", userId);
+    socket.broadcast.to(roomId).emit("user-connected", userId, (response) => {
+      //set remote
+    });
+  });
+  socket.on("hello", (arg, callback) => {
+    socket.broadcast.emit("increment", arg + 1);
+    callback(arg + 1);
   });
 });
 
@@ -40,6 +43,12 @@ app.post("/", (req, res) => {
   }
 });
 
-server.listen(8000, () => {
+srv = server.listen(8000, () => {
   console.log("Server started on port 8000");
 });
+app.use(
+  "/peerjs",
+  require("peer").ExpressPeerServer(srv, {
+    debug: true,
+  })
+);

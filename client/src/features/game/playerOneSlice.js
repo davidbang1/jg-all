@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import Peer from "peerjs"
 
 const initialState = {
   permaJewels: {
@@ -23,6 +24,7 @@ const initialState = {
   scrolls: 0,
   currPlayer: 1,
   reservedCards: ["hello", "bye"],
+  peerInfo: new Peer(),
 }
 
 export const playerOneSlice = createSlice({

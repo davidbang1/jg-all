@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react"
-import { testBackend, titleTest } from "../../app/redux/actions"
+import { testBackend, titleTest, getRoom } from "../../app/redux/actions"
 import { useDispatch } from "react-redux"
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom"
 
 export function Home() {
+  const navigate = useNavigate()
+
   const [input, setInput] = useState("")
   const [input2, setInput2] = useState("")
   const [testData, setTestData] = useState("Backend Not Connected")
@@ -13,7 +16,11 @@ export function Home() {
   }
   function enterCode() {}
   function test() {
+    dispatch(getRoom()).then((response) => {
+      navigate("/" + response)
+    })
     //connect to api
+    //navigate("/jewelgame")
   }
   useEffect(() => {
     dispatch(titleTest()).then((response) => {
