@@ -12,15 +12,11 @@ export function PeerPage() {
     setRemotePeer(id)
   })
 
-  socket.on("increment", (id) => {
-    setNum(id)
-  })
-
   useEffect(() => {
-    peer.on("open", (id) => {
-      setPeerId(id)
-      socket.emit("join-room", 10, id)
-    })
+    // peer.on("open", (id) => {
+    //   setPeerId(id)
+    socket.emit("join-room", 10, 4444444)
+    // })
   }, [])
 
   function increment() {
@@ -28,6 +24,9 @@ export function PeerPage() {
       setNum(response)
     })
   }
+  socket.on("increment", (id) => {
+    setNum(id)
+  })
 
   return (
     <div style={{ padding: "20%" }}>

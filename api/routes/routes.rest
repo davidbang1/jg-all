@@ -1,0 +1,17 @@
+GET http://localhost:8000/rooms
+
+###
+
+GET http://localhost:8000/rooms/aaeaff
+
+###
+
+POST http://localhost:8000/rooms
+Content-Type: application/json
+
+{
+    "name": "8987987",
+    "password": "req.body.password",
+    "player1": "req.body.p1",
+    "player2": "req.body.p2"
+}

@@ -17,7 +17,6 @@ export const boardSlice = createSlice({
       state.grid = action.payload
     },
     clearBoard: (state, action) => {
-      console.log("someone said clear board")
       state.status = action.payload
     },
   },

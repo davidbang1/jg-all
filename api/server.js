@@ -2,6 +2,15 @@ require("dotenv").config();
 const { ExpressPeerServer } = require("peer");
 const express = require("express");
 const app = express();
+const mongoose = require("mongoose");
+mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true });
+const db = mongoose.connection;
+db.on("error", (error) => {
+  console.error(error);
+});
+db.once("open", () => {
+  console.log("Connected to Database");
+});
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
 const { v4: uuidV4 } = require("uuid");
@@ -12,13 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static("public"));
 
-app.get("/test", (req, res) => {
-  res.send("Welcome to Game!");
-});
-
-app.get("/getRoom", (req, res) => {
-  res.send(uuidV4());
-});
+const roomsRouter = require("./routes/rooms");
+app.use("/rooms", roomsRouter);
 
 io.on("connection", (socket) => {
   //works
@@ -32,6 +36,25 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("increment", arg + 1);
     callback(arg + 1);
   });
+
+  socket.on("sendBoard", (arg) => {
+    io.emit("receiveBoard", arg);
+  });
+
+  socket.on("sendCards", (arg) => {
+    io.emit("receiveCards", arg);
+  });
+  socket.on("uncaughtException", function (err) {
+    console.log(err);
+  });
+});
+
+app.get("/test", (req, res) => {
+  //remove later
+  res.send("Welcome to Game!");
+});
+app.get("/getRoom", (req, res) => {
+  res.send(uuidV4());
 });
 
 app.post("/", (req, res) => {

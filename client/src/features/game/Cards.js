@@ -6,6 +6,7 @@ import { setCardList, setGoldNum, startReserve } from "./cardsSlice"
 import { getJewel, setCurrPlayer } from "./playerOneSlice.js"
 import { getJewel2, checkWin } from "./playerTwoSlice.js"
 import { showBoard, setBoard, clearBoard } from "./boardSlice"
+import { socket } from "../../app/hooks/socket"
 
 export function Cards(props) {
   const [count3, setCount3] = useState(13)
@@ -20,12 +21,15 @@ export function Cards(props) {
   const [card7, setCard7] = useState(0)
   const [card8, setCard8] = useState(0)
   const [card9, setCard9] = useState(0)
-  const threeCost = shuffle(data[0]["3"])
-  const twoCost = shuffle(data[1]["2"])
-  const oneCost = shuffle(data[2]["1"])
+
+  const [threeCost, setThreeCost] = useState(shuffle(data[0]["3"]))
+  const [twoCost, setTwoCost] = useState(shuffle(data[1]["2"]))
+  const [oneCost, setOneCost] = useState(shuffle(data[2]["1"]))
+
   const cardStatus = useSelector((state) => state.cards.status)
   const cardsStore = useSelector((state) => state.cards.cardList)
   // const currPlayer = useSelector((state) => state.playerOne.currPlayer)
+
   console.log("its player " + props.currPlayer)
   const dispatch = useDispatch()
 
@@ -53,71 +57,47 @@ export function Cards(props) {
     }
     return array
   }
-  function removeCard(index, tier) {
+  function removeCard(index) {
     //todo, reduce duplicate code
     //todo, remove index and tier
-    if (tier === 3) {
-      if (index === 1) {
-        setCard1(getCard(threeCost, 3, 1, 1))
-      } else if (index === 2) {
-        setCard2(getCard(threeCost, 3, 2, 2))
-      } else {
-        setCard3(getCard(threeCost, 3, 3, 3))
-      }
-    } else if (tier === 2) {
-      if (index === 1) {
-        setCard4(getCard(twoCost, 2, 1, 4))
-      } else if (index === 2) {
-        setCard5(getCard(twoCost, 2, 2, 5))
-      } else {
-        setCard6(getCard(twoCost, 2, 3, 6))
-      }
-    } else {
-      if (index === 1) {
-        setCard7(getCard(oneCost, 1, 1, 7))
-      } else if (index === 2) {
-        setCard8(getCard(oneCost, 1, 2, 8))
-      } else {
-        setCard9(getCard(oneCost, 1, 3, 9))
-      }
-    }
-  }
-
-  function reserveCard() {
-    if (cardStatus) {
-      console.log(this)
-    }
-  }
-
-  function addToPlayer(tier, index, realIndex) {
-    switch (realIndex) {
+    switch (index) {
       case 1:
-        setCard1(getCard(threeCost, 3, 1, 1))
+        setCard1(getCard(threeCost, 1))
         break
       case 2:
-        setCard2(getCard(threeCost, 3, 2, 2))
+        setCard2(getCard(threeCost, 2))
         break
       case 3:
-        setCard3(getCard(threeCost, 3, 3, 3))
+        setCard3(getCard(threeCost, 3))
         break
       case 4:
-        setCard4(getCard(twoCost, 2, 1, 4))
+        setCard4(getCard(twoCost, 4))
         break
       case 5:
-        setCard5(getCard(twoCost, 2, 2, 5))
+        setCard5(getCard(twoCost, 5))
         break
       case 6:
-        setCard6(getCard(twoCost, 2, 3, 6))
+        setCard6(getCard(twoCost, 6))
         break
       case 7:
-        setCard7(getCard(oneCost, 1, 1, 7))
+        setCard7(getCard(oneCost, 7))
         break
       case 8:
-        setCard8(getCard(oneCost, 1, 2, 8))
+        setCard8(getCard(oneCost, 8))
         break
       default:
-        setCard9(getCard(oneCost, 1, 3, 9))
+        setCard9(getCard(oneCost, 9))
     }
+  }
+
+  // function reserveCard() {
+  //   if (cardStatus) {
+  //     console.log(this)
+  //   }
+  // }
+
+  function addToPlayer(index) {
+    removeCard(index)
     //add option for top of deck button
 
     //todo: currplayer isn't switching
@@ -132,21 +112,19 @@ export function Cards(props) {
     dispatch(startReserve(false))
   }
 
-  function getCard(deck, tier, index, realIndex) {
+  function getCard(deck, index) {
     let info = deck.pop()
     let thisCard = (
       <Card
-        reserveCard={reserveCard}
+        // reserveCard={reserveCard}
         index={index}
-        realIndex={realIndex}
-        tier={tier}
         color={info.color}
         points={info.points}
         crowns={info.crowns}
         quantity={info.quantity}
         special={info.special}
         requirements={info.requirements}
-        removeCard={() => removeCard(index, tier)}
+        removeCard={() => removeCard(index)}
         action={props.action}
         setAction={props.setAction}
         addToPlayer={addToPlayer}
@@ -156,18 +134,39 @@ export function Cards(props) {
     return thisCard
   }
 
-  useEffect(() => {
-    setCard1(getCard(threeCost, 3, 1, 1))
-    setCard2(getCard(threeCost, 3, 2, 2))
-    setCard3(getCard(threeCost, 3, 3, 3))
-    console.log(cardList)
-    setCard4(getCard(twoCost, 2, 1, 4))
-    setCard5(getCard(twoCost, 2, 2, 5))
-    setCard6(getCard(twoCost, 2, 3, 6))
-    setCard7(getCard(oneCost, 1, 1, 7))
-    setCard8(getCard(oneCost, 1, 2, 8))
-    setCard9(getCard(oneCost, 1, 3, 9))
-  }, [])
+  socket.on("user-connected", (id, callback) => {
+    //give the player 2 the cards state
+
+    const cardStart = [threeCost, twoCost, oneCost]
+    fillCards()
+    socket.emit("sendCards", cardStart)
+    socket.on("receiveCards", (res) => {
+      setThreeCost(res[0])
+      setTwoCost(res[1])
+      setOneCost(res[2])
+      setCard1(getCard(res[0], 1))
+      setCard2(getCard(res[0], 2))
+      setCard3(getCard(res[0], 3))
+      setCard4(getCard(res[1], 4))
+      setCard5(getCard(res[1], 5))
+      setCard6(getCard(res[1], 6))
+      setCard7(getCard(res[2], 7))
+      setCard8(getCard(res[2], 8))
+      setCard9(getCard(res[2], 9))
+    })
+  })
+
+  function fillCards() {
+    setCard1(getCard(threeCost, 1))
+    setCard2(getCard(threeCost, 2))
+    setCard3(getCard(threeCost, 3))
+    setCard4(getCard(twoCost, 4))
+    setCard5(getCard(twoCost, 5))
+    setCard6(getCard(twoCost, 6))
+    setCard7(getCard(oneCost, 7))
+    setCard8(getCard(oneCost, 8))
+    setCard9(getCard(oneCost, 9))
+  }
 
   return (
     <div>

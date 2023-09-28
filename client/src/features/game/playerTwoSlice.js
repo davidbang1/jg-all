@@ -3,6 +3,7 @@ import { socket } from "../../app/hooks/socket"
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
+  id: "",
   permaJewels: {
     white: 0,
     blue: 0,

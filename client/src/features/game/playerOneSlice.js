@@ -24,7 +24,7 @@ const initialState = {
   scrolls: 0,
   currPlayer: 1,
   reservedCards: ["hello", "bye"],
-  peerInfo: new Peer(),
+  // peerInfo: new Peer(),
 }
 
 export const playerOneSlice = createSlice({
