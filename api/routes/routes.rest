@@ -1,8 +1,12 @@
 GET http://localhost:8000/rooms
+Content-Type: application/json
 
+{
+    "password":"afdgsfgfg"
+}
 ###
 
-GET http://localhost:8000/rooms/aaeaff
+GET http://localhost:8000/jg/65161839028023e38b96c9c5
 
 ###
 
@@ -10,8 +14,8 @@ POST http://localhost:8000/rooms
 Content-Type: application/json
 
 {
-    "name": "8987987",
-    "password": "req.body.password",
-    "player1": "req.body.p1",
-    "player2": "req.body.p2"
+    "name": "898444447987",
+    "password": "afdgsfgfg",
+    "player1": "edddarl",
+    "player2": "boeeennie"
 }

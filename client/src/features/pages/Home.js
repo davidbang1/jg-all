@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react"
-import { testBackend, titleTest, getRoom } from "../../app/redux/actions"
+import { createRoom, titleTest, getRoom } from "../../app/redux/actions"
 import { useDispatch } from "react-redux"
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom"
+import { v4 as uuidv4 } from "uuid"
 
 export function Home() {
   const navigate = useNavigate()
@@ -12,7 +13,7 @@ export function Home() {
   const dispatch = useDispatch()
 
   function sendCode() {
-    dispatch(testBackend(input))
+    dispatch(createRoom(uuidv4(), "fromfrontend2222", input))
   }
   function enterCode() {}
   function test() {
@@ -23,6 +24,8 @@ export function Home() {
     //navigate("/jewelgame")
   }
   useEffect(() => {
+    //set player 1 id
+    uuidv4()
     dispatch(titleTest()).then((response) => {
       setTestData(response)
     })
