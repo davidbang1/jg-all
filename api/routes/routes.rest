@@ -1,0 +1,31 @@
+GET http://localhost:8000/rooms
+Content-Type: application/json
+
+{
+    "password":"afdgsfgfg"
+}
+###
+
+GET http://localhost:8000/jg/65161839028023e38b96c9c5
+
+###
+
+POST http://localhost:8000/rooms/search
+Content-Type: application/json
+
+{
+    "password":"dsadf",
+    "player2":"mmmmmmtest2"
+}
+
+
+###
+POST http://localhost:8000/rooms
+Content-Type: application/json
+
+{
+    "name": "898444447987",
+    "password": "afdgsfgfg",
+    "player1": "reee",
+    "player2": "should be gone"
+}

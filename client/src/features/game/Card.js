@@ -87,7 +87,7 @@ export function Card(props) {
   function handleClick(e) {
     //for reserving a card
     if (cardStatus) {
-      props.addToPlayer(props.tier, props.index, props.realIndex)
+      props.addToPlayer(props.index)
       let info = [
         props.color,
         props.points,

@@ -2,10 +2,11 @@ import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import Cell from "./Cell.js"
 import { showBoard, setBoard, clearBoard } from "./boardSlice"
-import { emptyBag } from "./bagSlice"
+import { emptyBag, fillBoard, setBag } from "./bagSlice"
 import { getJewel, setCurrPlayer } from "./playerOneSlice.js"
 import { getJewel2, checkWin } from "./playerTwoSlice.js"
 import "../index.css"
+import { socket } from "../../app/hooks/socket"
 
 export function Board(props) {
   const count = useSelector(showBoard)
@@ -18,6 +19,20 @@ export function Board(props) {
   const boardStatus = useSelector((state) => state.board.status)
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
 
+  socket.on("user-connected", (id, callback) => {
+    //give the player 2 the board state
+    let arrayForSort = [...data]
+    shuffle(arrayForSort)
+    dispatch(setBag(arrayForSort))
+    socket.emit("sendBoard", arrayForSort)
+  })
+
+  socket.on("receiveBoard", (res) => {
+    if (res.length > 0) {
+      dispatch(setBag(res))
+    }
+  })
+
   useEffect(() => {
     let newGrid = new Array(25)
     if (Object.seal) {
@@ -25,6 +40,7 @@ export function Board(props) {
       Object.seal(newGrid)
     }
     setGrid(newGrid)
+    handleFill()
   }, [])
 
   useEffect(() => {
@@ -94,12 +110,9 @@ export function Board(props) {
 
   function handleFill() {
     if (data.length) {
-      let arrayForSort = [...data]
-      shuffle(arrayForSort)
-      arrayForSort = mapFirst(arrayForSort, boardState)
-      setGrid(arrayForSort)
+      setGrid(data)
       dispatch(emptyBag())
-      dispatch(setBoard(arrayForSort))
+      dispatch(setBoard(data))
     }
   }
   function takeJewels() {
