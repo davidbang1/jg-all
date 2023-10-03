@@ -10,6 +10,16 @@ GET http://localhost:8000/jg/65161839028023e38b96c9c5
 
 ###
 
+POST http://localhost:8000/rooms/search
+Content-Type: application/json
+
+{
+    "password":"dsadf",
+    "player2":"mmmmmmtest2"
+}
+
+
+###
 POST http://localhost:8000/rooms
 Content-Type: application/json
 

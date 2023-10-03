@@ -18,13 +18,32 @@ router.post("/", async (req, res) => {
 });
 
 //add a player 2
-router.post("/:password", getRoom, (req, res) => {
+router.post("/search", getRoom, (req, res) => {
   //
-  res.send(req.room.name);
+  try {
+    res.send(res.room);
+  } catch (err) {
+    res.status(404).json({ message: "not found" });
+  }
+  //res.send(req.room.name);
 });
 
 //delete room when both players leave
 
+//get all rooms
+router.get("/", async (req, res) => {
+  try {
+    const rooms = await Room.find();
+    const copyItems = [];
+
+    rooms.forEach((e) => {
+      copyItems.push(e.name);
+    });
+    res.status(201).json(copyItems);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
 //get one and update p2
 router.get("/", getRoom, async (req, res) => {
   try {
@@ -41,7 +60,7 @@ async function getRoom(req, res, next) {
   try {
     room = await Room.findOneAndUpdate(
       { password: req.body.password },
-      { $set: { player2: "hsdfooddddffdfsdfdfsdfddoo" } },
+      { $set: { player2: req.body.player2 } },
       { returnNewDocument: true }
     );
     if (room === null) {

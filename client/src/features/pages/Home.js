@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react"
-import { createRoom, titleTest, getRoom } from "../../app/redux/actions"
+import {
+  createRoom,
+  titleTest,
+  getRoom,
+  joinRoom,
+} from "../../app/redux/actions"
 import { useDispatch } from "react-redux"
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom"
 import { v4 as uuidv4 } from "uuid"
 
-export function Home() {
+export function Home(props) {
   const navigate = useNavigate()
 
   const [input, setInput] = useState("")
@@ -13,9 +18,17 @@ export function Home() {
   const dispatch = useDispatch()
 
   function sendCode() {
-    dispatch(createRoom(uuidv4(), "fromfrontend2222", input))
+    const roomId = uuidv4()
+    props.setRoomUUID(roomId)
+    navigate("/" + roomId)
+    dispatch(createRoom(roomId, "fromfrontend2222", input))
   }
-  function enterCode() {}
+  function enterCode() {
+    dispatch(joinRoom("joinimngfromfrontend2222", input2)).then((res) => {
+      props.setRoomUUID(res.name)
+      navigate("/" + res.name)
+    })
+  }
   function test() {
     dispatch(getRoom()).then((response) => {
       navigate("/" + response)
