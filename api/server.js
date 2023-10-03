@@ -34,6 +34,11 @@ io.on("connection", (socket) => {
       });
     }
   });
+
+  socket.on("remove-this", (arg) => {
+    socket.broadcast.emit("remove-this2", arg);
+  });
+
   socket.on("hello", (arg, callback) => {
     socket.broadcast.emit("increment", arg + 1);
     callback(arg + 1);

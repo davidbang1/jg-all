@@ -59,7 +59,7 @@ export function PlayerTwo(props) {
       Points:
       {myPoints.map((point, id) => (
         // <div onClick={() => handleClick()} key={id} name={jewel}>
-        <div>{point}</div>
+        <div key={id}>{point}</div>
       ))}
       <br />
       Crowns: {playerCrowns}
@@ -70,12 +70,12 @@ export function PlayerTwo(props) {
       <b>Permanent Jewels:</b>
       {myPerms.map((jewel, id) => (
         // <div onClick={() => handleClick()} key={id} name={jewel}>
-        <div>{jewel}</div>
+        <div key={id}>{jewel}</div>
       ))}
       <b>Jewels:</b>
       {myJewels.map((jewel, id) => (
         // <div onClick={() => handleClick()} key={id} name={jewel}>
-        <div>{jewel}</div>
+        <div key={id}>{jewel}</div>
       ))}
       <Modal
         open={open}

@@ -23,13 +23,13 @@ export function JewelDuel(props) {
     console.log(startingInfo)
     //props.roomId
     socket.emit("join-room", props.roomId, startingInfo[1], startingInfo[0])
-    // if (startingInfo[0] === 1) {
-    //   setPeerId(startingInfo[1])
-    // }
+    if (startingInfo[0] === 1) {
+      setPeerId(startingInfo[1])
+    }
   }, [])
 
   socket.on("user-connected", (id, callback) => {
-    // setRemotePeer(id)
+    setRemotePeer(id)
   })
 
   return (
@@ -37,7 +37,7 @@ export function JewelDuel(props) {
       <header className="App-header">
         Jewel Duel! It's Player {props.currPlayer}'s turn
       </header>
-      <body>
+      <div>
         <Grid container>
           <Grid item xs={2}>
             <PlayerOne action={props.action} setAction={props.setAction} />
@@ -51,8 +51,9 @@ export function JewelDuel(props) {
             <Scrolls />
             <Royals />
             <hr />
-            {idData} is player 1 <br />
-            {idData2 ? idData2 + " is player 2" : "cant find partner"}
+            {peerId} is player 1 <br />
+            {remotePeer} is player 2 <br />
+            You are Player {startingInfo[0]}
             <br />
           </Grid>
           <Grid item xs={4}>
@@ -63,7 +64,7 @@ export function JewelDuel(props) {
             />
           </Grid>
         </Grid>
-      </body>
+      </div>
     </div>
   )
 }

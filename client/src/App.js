@@ -8,6 +8,7 @@ import { Home } from "./features/pages/Home"
 import { JewelDuel } from "./features/pages/JewelDuel"
 import { PeerPage } from "./features/pages/PeerPage"
 import { getAllRooms } from "./app/redux/actions"
+import routes, { renderRoutes } from "./routes"
 function App() {
   const [action, setAction] = useState("")
   const [access, setAccess] = useState(true)
@@ -45,7 +46,9 @@ function App() {
           path="/hello"
           element={<PeerPage access={access} setAccess={setAccess} />}
         />
+        {/* {renderRoutes(routes)} */}
         <Route
+          exact
           path={roomUUID}
           element={
             <JewelDuel
@@ -67,21 +70,6 @@ function App() {
             />
           }
         />
-        {rooms?.map((item, index) => {
-          return (
-            <Route
-              path={item}
-              element={
-                <JewelDuel
-                  roomId={item}
-                  action={action}
-                  setAction={setAction}
-                  currPlayer={currPlayer}
-                />
-              }
-            />
-          )
-        })}
       </Routes>
     </BrowserRouter>
   )

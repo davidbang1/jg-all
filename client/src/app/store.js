@@ -11,6 +11,10 @@ import royalReducer from "../features/game/royalSlice"
 import homeReducer from "../features/pages/homeSlice"
 
 export const store = configureStore({
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
   reducer: {
     counter: counterReducer,
     bag: bagReducer,

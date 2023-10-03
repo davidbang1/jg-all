@@ -68,7 +68,7 @@ export function PlayerOne(props) {
       <br />
       Points:
       {myPoints.map((point, id) => (
-        <div>{point}</div>
+        <div key={id}>{point}</div>
       ))}
       <br />
       Crowns: {playerCrowns}
@@ -79,11 +79,11 @@ export function PlayerOne(props) {
       <br />
       <b>Permanent Jewels:</b>
       {myPerms.map((jewel, id) => (
-        <div>{jewel}</div>
+        <div key={id}>{jewel}</div>
       ))}
       <b>Jewels:</b>
       {myJewels.map((jewel, id) => (
-        <div>{jewel}</div>
+        <div key={id}>{jewel}</div>
       ))}
       <Modal
         open={open}
