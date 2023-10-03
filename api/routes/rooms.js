@@ -8,6 +8,10 @@ router.post("/", async (req, res) => {
     name: req.body.name,
     password: req.body.password,
     player1: req.body.player1,
+    board: req.body.board,
+    threeDeck: req.body.threeDeck,
+    twoDeck: req.body.twoDeck,
+    oneDeck: req.body.oneDeck,
   });
   try {
     const newRoom = await myRoom.save();

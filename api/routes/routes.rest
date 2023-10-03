@@ -26,6 +26,6 @@ Content-Type: application/json
 {
     "name": "898444447987",
     "password": "afdgsfgfg",
-    "player1": "edddarl",
-    "player2": "boeeennie"
+    "player1": "reee",
+    "player2": "should be gone"
 }

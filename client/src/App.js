@@ -54,6 +54,16 @@ function App() {
             />
           }
         />
+        <Route
+          path="/04e3c362-ae4d-4b76-abf8-ed78ada4fe95"
+          element={
+            <JewelDuel
+              action={action}
+              setAction={setAction}
+              currPlayer={currPlayer}
+            />
+          }
+        />
         {rooms?.map((item, index) => {
           return (
             <Route

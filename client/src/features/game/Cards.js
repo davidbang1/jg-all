@@ -22,9 +22,12 @@ export function Cards(props) {
   const [card8, setCard8] = useState(0)
   const [card9, setCard9] = useState(0)
 
-  const [threeCost, setThreeCost] = useState(shuffle(data[0]["3"]))
-  const [twoCost, setTwoCost] = useState(shuffle(data[1]["2"]))
-  const [oneCost, setOneCost] = useState(shuffle(data[2]["1"]))
+  const threeCostTemp = useSelector((state) => state.cards.threeDeck)
+  const twoCostTemp = useSelector((state) => state.cards.twoDeck)
+  const oneCostTemp = useSelector((state) => state.cards.oneDeck)
+  const threeCost = [...threeCostTemp]
+  const twoCost = [...twoCostTemp]
+  const oneCost = [...oneCostTemp]
 
   const cardStatus = useSelector((state) => state.cards.status)
   const cardsStore = useSelector((state) => state.cards.cardList)
@@ -44,22 +47,8 @@ export function Cards(props) {
     card8,
     card9,
   ]
-  function shuffle(array) {
-    let currentIndex = array.length,
-      randomIndex
-    while (currentIndex > 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex)
-      currentIndex--
-      ;[array[currentIndex], array[randomIndex]] = [
-        array[randomIndex],
-        array[currentIndex],
-      ]
-    }
-    return array
-  }
+
   function removeCard(index) {
-    //todo, reduce duplicate code
-    //todo, remove index and tier
     switch (index) {
       case 1:
         setCard1(getCard(threeCost, 1))
@@ -90,12 +79,6 @@ export function Cards(props) {
     }
   }
 
-  // function reserveCard() {
-  //   if (cardStatus) {
-  //     console.log(this)
-  //   }
-  // }
-
   function addToPlayer(index) {
     removeCard(index)
     //add option for top of deck button
@@ -113,10 +96,9 @@ export function Cards(props) {
   }
 
   function getCard(deck, index) {
-    let info = deck.pop()
+    let info = deck?.pop()
     let thisCard = (
       <Card
-        // reserveCard={reserveCard}
         index={index}
         color={info.color}
         points={info.points}
@@ -134,29 +116,7 @@ export function Cards(props) {
     return thisCard
   }
 
-  socket.on("user-connected", (id, callback) => {
-    //give the player 2 the cards state
-
-    const cardStart = [threeCost, twoCost, oneCost]
-    fillCards()
-    socket.emit("sendCards", cardStart)
-    socket.on("receiveCards", (res) => {
-      setThreeCost(res[0])
-      setTwoCost(res[1])
-      setOneCost(res[2])
-      setCard1(getCard(res[0], 1))
-      setCard2(getCard(res[0], 2))
-      setCard3(getCard(res[0], 3))
-      setCard4(getCard(res[1], 4))
-      setCard5(getCard(res[1], 5))
-      setCard6(getCard(res[1], 6))
-      setCard7(getCard(res[2], 7))
-      setCard8(getCard(res[2], 8))
-      setCard9(getCard(res[2], 9))
-    })
-  })
-
-  function fillCards() {
+  useEffect(() => {
     setCard1(getCard(threeCost, 1))
     setCard2(getCard(threeCost, 2))
     setCard3(getCard(threeCost, 3))
@@ -166,7 +126,7 @@ export function Cards(props) {
     setCard7(getCard(oneCost, 7))
     setCard8(getCard(oneCost, 8))
     setCard9(getCard(oneCost, 9))
-  }
+  }, [])
 
   return (
     <div>

@@ -3,16 +3,25 @@ import axios from "axios"
 const baseURL = "http://localhost:8000/"
 const myHeader = { "content-type": "application/json" }
 
-export const createRoom = (roomid, playerid, password) => async (dispatch) => {
-  const response = await axios.post(
-    baseURL + "rooms/",
-    { name: roomid, password: password, player1: playerid },
-    { headers: myHeader },
-  )
-  if (response.status === 200) {
-    return response.data
+export const createRoom =
+  (roomid, playerid, password, board, three, two, one) => async (dispatch) => {
+    const response = await axios.post(
+      baseURL + "rooms/",
+      {
+        name: roomid,
+        password: password,
+        player1: playerid,
+        board: board,
+        threeDeck: three,
+        twoDeck: two,
+        oneDeck: one,
+      },
+      { headers: myHeader },
+    )
+    if (response.status === 200) {
+      return response.data
+    }
   }
-}
 
 export const joinRoom = (playerid, password) => async (dispatch) => {
   const response = await axios.post(
