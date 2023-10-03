@@ -20,6 +20,7 @@ function App() {
 
   useEffect(() => {
     //get room ids an map to routes
+    //not used
     dispatch(getAllRooms()).then((res) => {
       setRooms(res)
       console.log(res)
@@ -48,6 +49,7 @@ function App() {
           path={roomUUID}
           element={
             <JewelDuel
+              roomId={roomUUID}
               action={action}
               setAction={setAction}
               currPlayer={currPlayer}
@@ -55,9 +57,10 @@ function App() {
           }
         />
         <Route
-          path="/04e3c362-ae4d-4b76-abf8-ed78ada4fe95"
+          path="/24358228-98e0-4b7b-b9fe-7ae3c6209aee"
           element={
             <JewelDuel
+              roomId="/24358228-98e0-4b7b-b9fe-7ae3c6209aee"
               action={action}
               setAction={setAction}
               currPlayer={currPlayer}
@@ -70,6 +73,7 @@ function App() {
               path={item}
               element={
                 <JewelDuel
+                  roomId={item}
                   action={action}
                   setAction={setAction}
                   currPlayer={currPlayer}

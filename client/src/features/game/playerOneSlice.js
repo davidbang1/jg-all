@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
-import Peer from "peerjs"
 
 const initialState = {
+  playerId: "",
   permaJewels: {
     white: 0,
     blue: 0,
@@ -24,13 +24,15 @@ const initialState = {
   scrolls: 0,
   currPlayer: 1,
   reservedCards: ["hello", "bye"],
-  // peerInfo: new Peer(),
 }
 
 export const playerOneSlice = createSlice({
   name: "playerOne",
   initialState,
   reducers: {
+    setId: (state, x) => {
+      state.playerId = x.payload
+    },
     getJewel: (state, x) => {
       for (let i = 0; i < x.payload.length; i++) {
         let myColor = x.payload[i]
@@ -103,6 +105,7 @@ export const {
   takeScroll,
   clearStatus,
   reserveCards,
+  setId,
 } = playerOneSlice.actions
 
 // The function below is called a selector and allows us to select a value from

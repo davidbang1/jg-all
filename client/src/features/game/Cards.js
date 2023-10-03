@@ -97,23 +97,25 @@ export function Cards(props) {
 
   function getCard(deck, index) {
     let info = deck?.pop()
-    let thisCard = (
-      <Card
-        index={index}
-        color={info.color}
-        points={info.points}
-        crowns={info.crowns}
-        quantity={info.quantity}
-        special={info.special}
-        requirements={info.requirements}
-        removeCard={() => removeCard(index)}
-        action={props.action}
-        setAction={props.setAction}
-        addToPlayer={addToPlayer}
-      />
-    )
-    dispatch(setCardList(thisCard))
-    return thisCard
+    if (info) {
+      let thisCard = (
+        <Card
+          index={index}
+          color={info?.color}
+          points={info?.points}
+          crowns={info?.crowns}
+          quantity={info?.quantity}
+          special={info?.special}
+          requirements={info?.requirements}
+          removeCard={() => removeCard(index)}
+          action={props.action}
+          setAction={props.setAction}
+          addToPlayer={addToPlayer}
+        />
+      )
+      dispatch(setCardList(thisCard))
+      return thisCard
+    } else return null
   }
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import { socket } from "../../app/hooks/socket"
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-  id: "",
+  playerId: "",
   permaJewels: {
     white: 0,
     blue: 0,
@@ -31,6 +31,9 @@ export const playerTwoSlice = createSlice({
   name: "playerTwo",
   initialState,
   reducers: {
+    setId2: (state, x) => {
+      state.playerId = x.payload
+    },
     getJewel2: (state, x) => {
       console.log("playerTwoSlice")
 
@@ -104,6 +107,7 @@ export const {
   checkWin,
   clearStatus2,
   reserveCards2,
+  setId2,
 } = playerTwoSlice.actions
 
 // The function below is called a selector and allows us to select a value from

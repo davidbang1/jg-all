@@ -26,11 +26,13 @@ app.use("/rooms", roomsRouter);
 
 io.on("connection", (socket) => {
   //works
-  socket.on("join-room", (roomId, userId) => {
+  socket.on("join-room", (roomId, userId, position) => {
     socket.join(roomId);
-    // socket.broadcast.to(roomId).emit("user-connected", userId, (response) => {
-    //   //set remote
-    // });
+    if (position === 2) {
+      socket.broadcast.to(roomId).emit("user-connected", userId, (response) => {
+        //set remote
+      });
+    }
   });
   socket.on("hello", (arg, callback) => {
     socket.broadcast.emit("increment", arg + 1);
