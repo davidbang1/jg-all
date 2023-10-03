@@ -28,9 +28,9 @@ io.on("connection", (socket) => {
   //works
   socket.on("join-room", (roomId, userId) => {
     socket.join(roomId);
-    socket.broadcast.to(roomId).emit("user-connected", userId, (response) => {
-      //set remote
-    });
+    // socket.broadcast.to(roomId).emit("user-connected", userId, (response) => {
+    //   //set remote
+    // });
   });
   socket.on("hello", (arg, callback) => {
     socket.broadcast.emit("increment", arg + 1);
@@ -41,9 +41,9 @@ io.on("connection", (socket) => {
     io.emit("receiveBoard", arg);
   });
 
-  socket.on("sendCards", (arg) => {
-    io.emit("receiveCards", arg);
-  });
+  // socket.on("sendCards", (arg) => {
+  //   io.emit("receiveCards", arg);
+  // });
   socket.on("uncaughtException", function (err) {
     console.log(err);
   });

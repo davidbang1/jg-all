@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import Cell from "./Cell.js"
 import { showBoard, setBoard, clearBoard } from "./boardSlice"
-import { emptyBag, setBag } from "./bagSlice"
+import { emptyBag, fillBoard, setBag } from "./bagSlice"
 import { getJewel, setCurrPlayer } from "./playerOneSlice.js"
 import { getJewel2, checkWin } from "./playerTwoSlice.js"
 import "../index.css"
@@ -40,6 +40,7 @@ export function Board(props) {
       Object.seal(newGrid)
     }
     setGrid(newGrid)
+    handleFill()
   }, [])
 
   useEffect(() => {
@@ -109,12 +110,6 @@ export function Board(props) {
 
   function handleFill() {
     if (data.length) {
-      // let arrayForSort = [...data]
-      // shuffle(arrayForSort)
-      // arrayForSort = mapFirst(arrayForSort, boardState)
-      // setGrid(arrayForSort)
-      // dispatch(emptyBag())
-      // dispatch(setBoard(arrayForSort))
       setGrid(data)
       dispatch(emptyBag())
       dispatch(setBoard(data))
