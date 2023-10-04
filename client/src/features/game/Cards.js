@@ -71,6 +71,16 @@ export function Cards(props) {
     removeCard(x.index)
   })
 
+  socket.off("reserve-card2")
+  socket.on("reserve-card2", (x) => {
+    addToPlayer(x.index)
+    if (currPlayer === 1) {
+      dispatch(reserveCards(x.info))
+    } else {
+      dispatch(reserveCards2(x.info))
+    }
+  })
+
   const cardList = [
     card1,
     card2,

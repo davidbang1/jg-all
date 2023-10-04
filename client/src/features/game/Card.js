@@ -102,6 +102,7 @@ export function Card(props) {
       } else {
         dispatch(reserveCards2(info))
       }
+      socket.emit("reserve-card", { index: props.index, info: info })
     }
   }
 

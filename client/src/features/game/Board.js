@@ -35,6 +35,13 @@ export function Board(props) {
     dispatch(checkWin())
   })
 
+  socket.off("gold-board2")
+  socket.on("gold-board2", (x) => {
+    removeThis(x.pot)
+    setPot([])
+    dispatch(clearBoard(""))
+  })
+
   socket.off("use-scroll2")
   socket.on("use-scroll2", (x) => {
     removeThis([x.number])
@@ -61,6 +68,7 @@ export function Board(props) {
     //cleaning
     if (boardStatus === "gold") {
       removeThis(pot)
+      socket.emit("gold-board", { pot: pot })
     } else {
       for (let i = 0; i < pot.length; i++) {
         document.getElementById(pot[i]).style.backgroundColor = "white"
@@ -170,7 +178,7 @@ export function Board(props) {
         Fill Board
       </button>
       <button aria-label="fill board" onClick={() => takeJewels()}>
-        Take {pot}
+        Take
       </button>
       <table>
         <tbody>
