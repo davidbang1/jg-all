@@ -47,6 +47,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("use-scroll2", arg);
   });
 
+  socket.on("fill-board", (arg) => {
+    socket.broadcast.emit("fill-board2", arg);
+  });
+
   socket.on("reserve-card", (arg) => {
     socket.broadcast.emit("reserve-card2", arg);
   });

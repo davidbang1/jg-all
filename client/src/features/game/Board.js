@@ -54,6 +54,14 @@ export function Board(props) {
       dispatch(takeScroll2())
     }
   })
+
+  socket.off("fill-board2")
+  socket.on("fill-board2", (x) => {
+    setGrid(x.board)
+    dispatch(emptyBag())
+    dispatch(setBoard(x.board))
+  })
+
   useEffect(() => {
     let newGrid = new Array(25)
     if (Object.seal) {
@@ -83,6 +91,7 @@ export function Board(props) {
     12, 11, 10, 25,
   ]
 
+  //unused
   function shuffle(array) {
     let currentIndex = array.length,
       randomIndex
@@ -106,7 +115,6 @@ export function Board(props) {
     dispatch(setBoard(tempArr))
   }
 
-  //unused??
   function mapFirst(arr, currGrid) {
     if (currGrid.length === 0) {
       let newGrid = new Array(25)
@@ -132,9 +140,11 @@ export function Board(props) {
 
   function handleFill() {
     if (data.length) {
-      setGrid(data)
+      let final = mapFirst(data, boardState)
+      setGrid(final)
       dispatch(emptyBag())
-      dispatch(setBoard(data))
+      dispatch(setBoard(final))
+      socket.emit("fill-board", { board: final })
     }
   }
   function takeJewels() {
@@ -174,10 +184,10 @@ export function Board(props) {
 
   return (
     <div>
-      <button aria-label="fill board" onClick={() => handleFill()}>
+      <button aria-label="fill-board" onClick={() => handleFill()}>
         Fill Board
       </button>
-      <button aria-label="fill board" onClick={() => takeJewels()}>
+      <button aria-label="take-board" onClick={() => takeJewels()}>
         Take
       </button>
       <table>
