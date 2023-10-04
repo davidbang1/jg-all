@@ -43,6 +43,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("buy-card2", arg);
   });
 
+  socket.on("use-scroll", (arg) => {
+    socket.broadcast.emit("use-scroll2", arg);
+  });
+
   socket.on("hello", (arg, callback) => {
     socket.broadcast.emit("increment", arg + 1);
     callback(arg + 1);

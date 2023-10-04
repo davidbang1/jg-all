@@ -8,6 +8,9 @@ import { getJewel2, checkWin } from "./playerTwoSlice.js"
 import "../index.css"
 import { socket } from "../../app/hooks/socket"
 import { toast } from "react-toastify"
+import { takeScroll } from "./playerOneSlice"
+import { takeScroll2 } from "./playerTwoSlice"
+import { addScroll } from "./scrollSlice"
 
 export function Board(props) {
   const count = useSelector(showBoard)
@@ -23,6 +26,7 @@ export function Board(props) {
 
   socket.off("remove-this2")
   socket.on("remove-this2", (x) => {
+    //dispatch(clearBoard("clean"))
     removeThis(x.pot)
     currPlayer === 1
       ? dispatch(getJewel(x.takeThese))
@@ -31,6 +35,18 @@ export function Board(props) {
     dispatch(checkWin())
   })
 
+  socket.off("use-scroll2")
+  socket.on("use-scroll2", (x) => {
+    removeThis([x.number])
+    dispatch(addScroll())
+    if (currPlayer === 1) {
+      dispatch(getJewel([x.jewel]))
+      dispatch(takeScroll())
+    } else {
+      dispatch(getJewel2([x.jewel]))
+      dispatch(takeScroll2())
+    }
+  })
   useEffect(() => {
     let newGrid = new Array(25)
     if (Object.seal) {

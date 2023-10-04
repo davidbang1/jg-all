@@ -4,6 +4,8 @@ import { takeScroll } from "./playerOneSlice"
 import { takeScroll2 } from "./playerTwoSlice"
 import { addScroll } from "./scrollSlice"
 import { startReserve } from "./cardsSlice"
+import { toast } from "react-toastify"
+import { socket } from "../../app/hooks/socket"
 import "../index.css"
 
 function Cell(props) {
@@ -45,7 +47,6 @@ function Cell(props) {
 
   function handleClick(pot) {
     //TODO Fix clicking between gold and pink
-    //scroll action
     if (props.action === "scroll") {
       if (props.jewel && props.jewel !== "gold") {
         if (currPlayer === 1) {
@@ -57,8 +58,10 @@ function Cell(props) {
         }
         props.removeThis([props.number])
         props.setAction("")
-        //give scroll to zone
         dispatch(addScroll())
+        socket.emit("use-scroll", { jewel: props.jewel, number: props.number })
+      } else if (props.jewel && props.jewel === "gold") {
+        toast.error("cannot buy gold with a scroll")
       }
     } else {
       if (props.jewel === "gold") {
