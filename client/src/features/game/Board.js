@@ -21,28 +21,15 @@ export function Board(props) {
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
   const startingInfo = useSelector((state) => state.home.info)
 
-  socket.on("user-connected", (id, callback) => {
-    //give the player 2 the board state
-    let arrayForSort = [...data]
-    shuffle(arrayForSort)
-    dispatch(setBag(arrayForSort))
-    socket.emit("sendBoard", arrayForSort)
-  })
-
-  socket.on("receiveBoard", (res) => {
-    if (res.length > 0) {
-      dispatch(setBag(res))
-    }
-  })
+  socket.off("remove-this2")
   socket.on("remove-this2", (x) => {
-    //runs too many times. 4 times
     removeThis(x.pot)
-    console.log("on remove take")
     currPlayer === 1
       ? dispatch(getJewel(x.takeThese))
       : dispatch(getJewel2(x.takeThese))
     dispatch(setCurrPlayer())
   })
+
   useEffect(() => {
     let newGrid = new Array(25)
     if (Object.seal) {
