@@ -20,7 +20,6 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    //get room ids an map to routes
     //not used
     dispatch(getAllRooms()).then((res) => {
       setRooms(res)

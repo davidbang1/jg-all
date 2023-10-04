@@ -15,6 +15,7 @@ import { toast } from "react-toastify"
 import crown from "../assets/crown.png"
 import crown2 from "../assets/crown2.jpeg"
 import crown3 from "../assets/crown3.jpeg"
+import { socket } from "../../app/hooks/socket"
 
 export function Card(props) {
   const [open, setOpen] = useState(false)
@@ -124,6 +125,8 @@ export function Card(props) {
       dispatch(checkWin())
 
       props.removeCard()
+
+      socket.emit("buy-card", { cart: cart, props: props, index: props.index })
     }
     setCart([])
     setOpen(false)

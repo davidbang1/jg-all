@@ -39,6 +39,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("remove-this2", arg);
   });
 
+  socket.on("buy-card", (arg) => {
+    socket.broadcast.emit("buy-card2", arg);
+  });
+
   socket.on("hello", (arg, callback) => {
     socket.broadcast.emit("increment", arg + 1);
     callback(arg + 1);

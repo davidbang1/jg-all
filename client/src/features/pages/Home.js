@@ -74,9 +74,9 @@ export function Home(props) {
 
     navigate("/" + roomId)
   }
+
   function enterCode() {
     const player2Id = "player2id"
-
     dispatch(joinRoom(player2Id, input2)).then((res) => {
       props.setRoomUUID(res.name)
       //set board and three decks here

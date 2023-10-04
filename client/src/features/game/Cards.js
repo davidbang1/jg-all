@@ -1,17 +1,38 @@
 import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import data from "../data/cardData.json"
 import { Card } from "../game/Card"
-import { setCardList, setGoldNum, startReserve } from "./cardsSlice"
-import { getJewel, setCurrPlayer } from "./playerOneSlice.js"
-import { getJewel2, checkWin } from "./playerTwoSlice.js"
+import {
+  setCardList,
+  setDecks,
+  setGoldNum,
+  startReserve,
+  setDeck3,
+  setDeck2,
+  setDeck1,
+} from "./cardsSlice"
 import { showBoard, setBoard, clearBoard } from "./boardSlice"
 import { socket } from "../../app/hooks/socket"
+import {
+  addCard,
+  payJewels,
+  setCurrPlayer,
+  reserveCards,
+  getJewel,
+} from "./playerOneSlice"
+import {
+  addCard2,
+  payJewels2,
+  checkWin,
+  reserveCards2,
+  getJewel2,
+} from "./playerTwoSlice"
+import { addToBag } from "./bagSlice"
 
 export function Cards(props) {
+  const dispatch = useDispatch()
   const [count3, setCount3] = useState(13)
   const [count2, setCount2] = useState(24)
-  const [count1, setCount1] = useState(0)
+  const [count1, setCount1] = useState(30)
   const [card1, setCard1] = useState(0)
   const [card2, setCard2] = useState(0)
   const [card3, setCard3] = useState(0)
@@ -25,16 +46,30 @@ export function Cards(props) {
   const threeCostTemp = useSelector((state) => state.cards.threeDeck)
   const twoCostTemp = useSelector((state) => state.cards.twoDeck)
   const oneCostTemp = useSelector((state) => state.cards.oneDeck)
-  const threeCost = [...threeCostTemp]
-  const twoCost = [...twoCostTemp]
-  const oneCost = [...oneCostTemp]
+  const [threeCost] = useState(JSON.parse(JSON.stringify(threeCostTemp)))
+  const [twoCost] = useState(JSON.parse(JSON.stringify(twoCostTemp)))
+  const [oneCost] = useState(JSON.parse(JSON.stringify(oneCostTemp)))
 
   const cardStatus = useSelector((state) => state.cards.status)
   const cardsStore = useSelector((state) => state.cards.cardList)
-  // const currPlayer = useSelector((state) => state.playerOne.currPlayer)
+  const currPlayer = useSelector((state) => state.playerOne.currPlayer)
+  const startingInfo = useSelector((state) => state.home.info)
 
-  console.log("its player " + props.currPlayer)
-  const dispatch = useDispatch()
+  socket.off("buy-card2")
+  socket.on("buy-card2", (x) => {
+    dispatch(addToBag(x.cart))
+    if (currPlayer === 1) {
+      dispatch(payJewels(x.cart))
+      dispatch(addCard(x.props))
+    } else {
+      dispatch(payJewels2(x.cart))
+      dispatch(addCard2(x.props))
+    }
+    dispatch(setCurrPlayer())
+    dispatch(checkWin())
+    //remove card and set new decks
+    removeCard(x.index)
+  })
 
   const cardList = [
     card1,
@@ -96,17 +131,24 @@ export function Cards(props) {
   }
 
   function getCard(deck, index) {
-    let info = deck?.pop()
+    let info = deck[deck.length - 1]
+    if (index < 4) {
+      dispatch(setDeck3(threeCost.splice(-1)))
+    } else if (index < 7) {
+      dispatch(setDeck2(twoCost.splice(-1)))
+    } else {
+      dispatch(setDeck1(oneCost.splice(-1)))
+    }
     if (info) {
       let thisCard = (
         <Card
           index={index}
-          color={info?.color}
-          points={info?.points}
-          crowns={info?.crowns}
-          quantity={info?.quantity}
-          special={info?.special}
-          requirements={info?.requirements}
+          color={info.color}
+          points={info.points}
+          crowns={info.crowns}
+          quantity={info.quantity}
+          special={info.special}
+          requirements={info.requirements}
           removeCard={() => removeCard(index)}
           action={props.action}
           setAction={props.setAction}

@@ -7,7 +7,7 @@ const initialState = {
   twoDeck: [],
   oneDeck: [],
 }
-
+console.log("cardsslice")
 export const cardsSlice = createSlice({
   name: "scroll",
   initialState,
@@ -25,12 +25,28 @@ export const cardsSlice = createSlice({
       state.twoDeck = x.payload[1]
       state.oneDeck = x.payload[2]
     },
+    setDeck3: (state, x) => {
+      state.threeDeck = x.payload
+    },
+    setDeck2: (state, x) => {
+      state.twoDeck = x.payload
+    },
+    setDeck1: (state, x) => {
+      state.oneDeck = x.payload
+    },
   },
 
   extraReducers: () => {},
 })
 
-export const { setCardList, emptyBag, startReserve, setDecks } =
-  cardsSlice.actions
+export const {
+  setCardList,
+  emptyBag,
+  startReserve,
+  setDecks,
+  setDeck3,
+  setDeck2,
+  setDeck1,
+} = cardsSlice.actions
 
 export default cardsSlice.reducer

@@ -28,6 +28,7 @@ export function Board(props) {
       ? dispatch(getJewel(x.takeThese))
       : dispatch(getJewel2(x.takeThese))
     dispatch(setCurrPlayer())
+    dispatch(checkWin())
   })
 
   useEffect(() => {
