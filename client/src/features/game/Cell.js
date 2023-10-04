@@ -13,6 +13,7 @@ function Cell(props) {
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
   const cardStatus = useSelector((state) => state.card.status)
   const goldNum = useSelector((state) => state.cards.goldNum)
+  const startingInfo = useSelector((state) => state.home.info)
 
   function withinLine(pot, newNum) {
     //math to check pot is in a line
@@ -47,51 +48,60 @@ function Cell(props) {
 
   function handleClick(pot) {
     //TODO Fix clicking between gold and pink
-    if (props.action === "scroll") {
-      if (props.jewel && props.jewel !== "gold") {
-        if (currPlayer === 1) {
-          dispatch(props.getJewel([props.jewel]))
-          dispatch(takeScroll())
-        } else {
-          dispatch(props.getJewel2([props.jewel]))
-          dispatch(takeScroll2())
+    if (currPlayer === startingInfo[0]) {
+      if (props.action === "scroll") {
+        if (props.jewel && props.jewel !== "gold") {
+          if (currPlayer === 1) {
+            dispatch(props.getJewel([props.jewel]))
+            dispatch(takeScroll())
+          } else {
+            dispatch(props.getJewel2([props.jewel]))
+            dispatch(takeScroll2())
+          }
+          props.removeThis([props.number])
+          props.setAction("")
+          dispatch(addScroll())
+          socket.emit("use-scroll", {
+            jewel: props.jewel,
+            number: props.number,
+          })
+        } else if (props.jewel && props.jewel === "gold") {
+          toast.error("cannot buy gold with a scroll")
         }
-        props.removeThis([props.number])
-        props.setAction("")
-        dispatch(addScroll())
-        socket.emit("use-scroll", { jewel: props.jewel, number: props.number })
-      } else if (props.jewel && props.jewel === "gold") {
-        toast.error("cannot buy gold with a scroll")
+      } else {
+        if (props.jewel === "gold") {
+          if (cardStatus) {
+            document.getElementById(props.number).style.backgroundColor =
+              "white"
+            dispatch(startReserve(false))
+            pot.splice(0, 1)
+          } else {
+            document.getElementById(props.number).style.backgroundColor = "gold"
+            // props.setAction("reserve")
+            dispatch(startReserve(true))
+            pot.push(props.number)
+          }
+          //once reserved, reset the gold click
+        }
+        //adds to pot if within line
+        if (props.jewel && props.jewel !== "gold" && props.action === "") {
+          if (pot.includes(props.number)) {
+            const index = pot.indexOf(props.number)
+            if (index > -1) {
+              pot.splice(index, 1)
+            }
+            document.getElementById(props.number).style.backgroundColor =
+              "white"
+          } else if (pot.length < 3 && withinLine(pot, props.number)) {
+            pot.push(props.number)
+            document.getElementById(props.number).style.backgroundColor = "pink"
+          } else {
+            return false
+          }
+        }
       }
     } else {
-      if (props.jewel === "gold") {
-        if (cardStatus) {
-          document.getElementById(props.number).style.backgroundColor = "white"
-          dispatch(startReserve(false))
-          pot.splice(0, 1)
-        } else {
-          document.getElementById(props.number).style.backgroundColor = "gold"
-          // props.setAction("reserve")
-          dispatch(startReserve(true))
-          pot.push(props.number)
-        }
-        //once reserved, reset the gold click
-      }
-      //adds to pot if within line
-      if (props.jewel && props.jewel !== "gold" && props.action === "") {
-        if (pot.includes(props.number)) {
-          const index = pot.indexOf(props.number)
-          if (index > -1) {
-            pot.splice(index, 1)
-          }
-          document.getElementById(props.number).style.backgroundColor = "white"
-        } else if (pot.length < 3 && withinLine(pot, props.number)) {
-          pot.push(props.number)
-          document.getElementById(props.number).style.backgroundColor = "pink"
-        } else {
-          return false
-        }
-      }
+      toast.error("not your turn")
     }
   }
 

@@ -24,12 +24,13 @@ export function Card(props) {
   const playerPermaJewels = useSelector((state) => state.playerOne.permaJewels)
   const playerJewels = useSelector((state) => state.playerOne.jewels)
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
+  const startingInfo = useSelector((state) => state.home.info)
 
   const playerPermaJewels2 = useSelector((state) => state.playerTwo.permaJewels)
   const playerJewels2 = useSelector((state) => state.playerTwo.jewels)
   const cardStatus = useSelector((state) => state.card.status)
   const tempJewels = Object.entries(
-    currPlayer === 1 ? playerJewels : playerJewels2,
+    startingInfo[0] === 1 ? playerJewels : playerJewels2,
   )
   const [whatIHave, setWhatIHave] = useState(
     JSON.parse(JSON.stringify(tempJewels)),
@@ -43,7 +44,9 @@ export function Card(props) {
   function handleOpen() {
     setOpen(true)
     let temp
-    currPlayer === 1 ? (temp = playerPermaJewels) : (temp = playerPermaJewels2)
+    startingInfo[0] === 1
+      ? (temp = playerPermaJewels)
+      : (temp = playerPermaJewels2)
     let afterP = Object.keys(props.requirements).reduce((a, k) => {
       a[k] = props.requirements[k] - temp[k]
       return a < 0 ? 0 : a
@@ -107,30 +110,38 @@ export function Card(props) {
   }
 
   function buyCard() {
-    let check = true
-    for (let i = 0; i < afterPerm.length; i++) {
-      if (afterPerm[i][1] !== 0) {
-        check = false
+    if (currPlayer === startingInfo[0]) {
+      let check = true
+      for (let i = 0; i < afterPerm.length; i++) {
+        if (afterPerm[i][1] !== 0) {
+          check = false
+        }
       }
-    }
-    if (check) {
-      dispatch(addToBag(cart))
-      if (currPlayer === 1) {
-        dispatch(payJewels(cart))
-        dispatch(addCard(props))
-      } else {
-        dispatch(payJewels2(cart))
-        dispatch(addCard2(props))
+      if (check) {
+        dispatch(addToBag(cart))
+        if (currPlayer === 1) {
+          dispatch(payJewels(cart))
+          dispatch(addCard(props))
+        } else {
+          dispatch(payJewels2(cart))
+          dispatch(addCard2(props))
+        }
+        dispatch(setCurrPlayer())
+        dispatch(checkWin())
+
+        props.removeCard()
+
+        socket.emit("buy-card", {
+          cart: cart,
+          props: props,
+          index: props.index,
+        })
       }
-      dispatch(setCurrPlayer())
-      dispatch(checkWin())
-
-      props.removeCard()
-
-      socket.emit("buy-card", { cart: cart, props: props, index: props.index })
+      setCart([])
+      setOpen(false)
+    } else {
+      toast.error("not your turn")
     }
-    setCart([])
-    setOpen(false)
   }
 
   function myCrown() {

@@ -139,12 +139,16 @@ export function Board(props) {
   }
 
   function handleFill() {
-    if (data.length) {
-      let final = mapFirst(data, boardState)
-      setGrid(final)
-      dispatch(emptyBag())
-      dispatch(setBoard(final))
-      socket.emit("fill-board", { board: final })
+    if (currPlayer === startingInfo[0]) {
+      if (data.length) {
+        let final = mapFirst(data, boardState)
+        setGrid(final)
+        dispatch(emptyBag())
+        dispatch(setBoard(final))
+        socket.emit("fill-board", { board: final })
+      }
+    } else {
+      toast.error("not your turn")
     }
   }
   function takeJewels() {

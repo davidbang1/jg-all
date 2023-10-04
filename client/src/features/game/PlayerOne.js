@@ -18,10 +18,18 @@ export function PlayerOne(props) {
   const winC = useSelector((state) => state.playerOne.status)
   const winC2 = useSelector((state) => state.playerTwo.status)
   const reservedCards = useSelector((state) => state.playerOne.reservedCards)
+  const startingInfo = useSelector((state) => state.home.info)
 
   function handleOpen() {
     setOpen(true)
   }
+
+  useEffect(() => {
+    if (startingInfo[0] === 2) {
+      document.getElementById("scroll-button1").disabled = true
+      document.getElementById("reserved-cards1").disabled = true
+    }
+  }, [])
 
   function handleClose() {
     dispatch(clearStatus())
@@ -62,7 +70,9 @@ export function PlayerOne(props) {
 
   return (
     <div>
-      <button onClick={handleClick}>{bText}</button>
+      <button id="scroll-button1" onClick={handleClick}>
+        {bText}
+      </button>
       <br />
       Player One
       <br />
@@ -75,7 +85,9 @@ export function PlayerOne(props) {
       <br />
       Scrolls: {playerScrolls}
       <br />
-      <button onClick={viewCards}>View Reserved Cards</button>
+      <button id="reserved-cards1" onClick={viewCards}>
+        View Reserved Cards
+      </button>
       <br />
       <b>Permanent Jewels:</b>
       {myPerms.map((jewel, id) => (
