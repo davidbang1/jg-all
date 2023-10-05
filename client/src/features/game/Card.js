@@ -159,6 +159,29 @@ export function Card(props) {
       toast.error("you need a color to buy colorless")
     }
   }
+  function stealAction() {
+    setJMAction("steal")
+    const temp = []
+    if (currPlayer === 2) {
+      for (const x in playerJewels) {
+        if (playerJewels[x] > 0) {
+          temp.push(x)
+        }
+      }
+    } else {
+      for (const x in playerJewels2) {
+        if (playerJewels2[x] > 0) {
+          temp.push(x)
+        }
+      }
+    }
+    if (temp.length > 0) {
+      setJMJewels(temp)
+      setJOpen(true)
+    } else {
+      toast.error("Opponent has nothing you can steal")
+    }
+  }
   function buyCard() {
     if (currPlayer === startingInfo[0]) {
       let check = true
@@ -172,6 +195,9 @@ export function Card(props) {
         //TODO: Here check if there is a special action
         if (props.special === "wild") {
           wildAction()
+        } else if (props.special === "steal" || props.special === "none") {
+          stealAction()
+          regularCardAction()
         } else {
           regularCardAction()
         }

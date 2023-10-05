@@ -23,6 +23,8 @@ export function JewelsModal(props) {
   //props are jewels and action
   const dispatch = useDispatch()
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
+  const startingInfo = useSelector((state) => state.home.info)
+
   console.log("jewel modal")
   //pass in title,
   //pass in my permajewels if getting colorless card
@@ -53,16 +55,35 @@ export function JewelsModal(props) {
   //       }
   //     }
   //   }, props.open)
+
+  socket.off("steal-jewel2")
+  socket.on("steal-jewel2", (x) => {
+    if (x.currPlayer === 1) {
+      dispatch(payJewels2([x.jewel]))
+      dispatch(getJewel([x.jewel]))
+    } else {
+      dispatch(payJewels([x.jewel]))
+      dispatch(getJewel2([x.jewel]))
+    }
+    dispatch(setCurrPlayer())
+    dispatch(checkWin())
+  })
+
   function handleClick(jewel) {
-    console.log(jewel)
     if (props.action === "steal") {
       if (currPlayer === 1) {
         dispatch(payJewels2([jewel]))
-        dispatch(getJewel2([jewel]))
+        dispatch(getJewel([jewel]))
+        socket.emit("steal-jewel", { jewel: jewel, currPlayer: 1 })
       } else {
         dispatch(payJewels([jewel]))
-        dispatch(getJewel([jewel]))
+        dispatch(getJewel2([jewel]))
+        socket.emit("steal-jewel", { jewel: jewel, currPlayer: 2 })
       }
+      dispatch(setCurrPlayer())
+      dispatch(checkWin())
+      props.handleClose()
+
       //emit
     } else if (props.action === "colorless") {
       let obj = JSON.parse(JSON.stringify(props.extra))
