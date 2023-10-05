@@ -69,7 +69,13 @@ export function Board(props) {
       Object.seal(newGrid)
     }
     setGrid(newGrid)
-    handleFill()
+    if (data.length) {
+      let final = mapFirst(data, boardState)
+      setGrid(final)
+      dispatch(emptyBag())
+      dispatch(setBoard(final))
+      socket.emit("fill-board", { board: final })
+    }
   }, [])
 
   useEffect(() => {

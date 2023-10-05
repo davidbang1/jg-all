@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import "./card.css"
 import "../index.css"
+import { JewelsModal } from "./JewelsModal"
 import { Paper, Button, Modal, Box, Grid } from "@mui/material"
 import {
   addCard,
@@ -18,14 +19,17 @@ import crown3 from "../assets/crown3.jpeg"
 import { socket } from "../../app/hooks/socket"
 
 export function Card(props) {
+  const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
+  const [jOpen, setJOpen] = useState(false)
+  const [jmAction, setJMAction] = useState()
+  const [jmJewels, setJMJewels] = useState()
   const [afterPerm, setAfterPerm] = useState([])
   const [cart, setCart] = useState([])
   const playerPermaJewels = useSelector((state) => state.playerOne.permaJewels)
   const playerJewels = useSelector((state) => state.playerOne.jewels)
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
   const startingInfo = useSelector((state) => state.home.info)
-
   const playerPermaJewels2 = useSelector((state) => state.playerTwo.permaJewels)
   const playerJewels2 = useSelector((state) => state.playerTwo.jewels)
   const cardStatus = useSelector((state) => state.card.status)
@@ -39,7 +43,6 @@ export function Card(props) {
   useEffect(() => {
     setWhatIHave(JSON.parse(JSON.stringify(tempJewels)))
   }, [playerJewels, playerJewels2])
-  const dispatch = useDispatch()
 
   function handleOpen() {
     setOpen(true)
@@ -60,6 +63,10 @@ export function Card(props) {
     setOpen(false)
   }
 
+  function handleJClose() {
+    setCart([])
+    setJOpen(false)
+  }
   const reqs = Object.entries(props.requirements)
 
   function addToCart(item) {
@@ -109,33 +116,65 @@ export function Card(props) {
     }
   }
 
+  function regularCardAction() {
+    dispatch(addToBag(cart))
+    if (currPlayer === 1) {
+      dispatch(payJewels(cart))
+      dispatch(addCard(props))
+    } else {
+      dispatch(payJewels2(cart))
+      dispatch(addCard2(props))
+    }
+    dispatch(setCurrPlayer())
+    dispatch(checkWin())
+
+    props.removeCard()
+
+    socket.emit("buy-card", {
+      cart: cart,
+      props: props,
+      index: props.index,
+    })
+  }
+  function wildAction() {
+    setJMAction("colorless")
+    const temp = []
+    if (currPlayer === 1) {
+      for (const x in playerPermaJewels) {
+        if (playerPermaJewels[x] > 0) {
+          temp.push(x)
+        }
+      }
+    } else {
+      for (const x in playerPermaJewels2) {
+        if (playerPermaJewels2[x] > 0) {
+          temp.push(x)
+        }
+      }
+    }
+    if (temp.length > 0) {
+      setJMJewels(temp)
+      setJOpen(true)
+    } else {
+      toast.error("you need a color to buy colorless")
+    }
+  }
   function buyCard() {
     if (currPlayer === startingInfo[0]) {
       let check = true
       for (let i = 0; i < afterPerm.length; i++) {
-        if (afterPerm[i][1] !== 0) {
+        if (afterPerm[i][1] > 0) {
+          //TODO bug negative
           check = false
         }
       }
       if (check) {
-        dispatch(addToBag(cart))
-        if (currPlayer === 1) {
-          dispatch(payJewels(cart))
-          dispatch(addCard(props))
+        //TODO: Here check if there is a special action
+        if (props.special === "wild") {
+          wildAction()
         } else {
-          dispatch(payJewels2(cart))
-          dispatch(addCard2(props))
+          regularCardAction()
         }
-        dispatch(setCurrPlayer())
-        dispatch(checkWin())
-
-        props.removeCard()
-
-        socket.emit("buy-card", {
-          cart: cart,
-          props: props,
-          index: props.index,
-        })
       }
       setCart([])
       setOpen(false)
@@ -187,6 +226,16 @@ export function Card(props) {
           <Button onClick={handleOpen}>BUY</Button>
         </Grid>
       </Grid>
+      <JewelsModal
+        open={jOpen}
+        handleClose={handleJClose}
+        jewels={jmJewels}
+        action={jmAction}
+        extra={props}
+        cost={cart}
+        removeCard={props.removeCard}
+        index={props.index}
+      />
       <Modal
         open={open}
         onClose={handleClose}
