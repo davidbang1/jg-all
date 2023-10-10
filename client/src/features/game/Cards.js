@@ -27,6 +27,7 @@ import {
   getJewel2,
 } from "./playerTwoSlice"
 import { addToBag } from "./bagSlice"
+import { toast } from "react-toastify"
 
 export function Cards(props) {
   const dispatch = useDispatch()
@@ -54,6 +55,22 @@ export function Cards(props) {
   const cardsStore = useSelector((state) => state.cards.cardList)
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
   const startingInfo = useSelector((state) => state.home.info)
+
+  socket.off("skip-turn2")
+  socket.on("skip-turn2", (x) => {
+    dispatch(addToBag(x.cart))
+    if (currPlayer === 1) {
+      dispatch(payJewels(x.cart))
+      dispatch(addCard(x.props))
+    } else {
+      dispatch(payJewels2(x.cart))
+      dispatch(addCard2(x.props))
+    }
+    dispatch(checkWin())
+    toast.info("opponent goes again")
+    //remove card and set new decks
+    removeCard(x.index)
+  })
 
   socket.off("buy-card2")
   socket.on("buy-card2", (x) => {

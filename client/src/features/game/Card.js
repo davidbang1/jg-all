@@ -9,9 +9,19 @@ import {
   payJewels,
   setCurrPlayer,
   reserveCards,
+  addScroll,
+  takeScroll,
 } from "./playerOneSlice"
-import { addCard2, payJewels2, checkWin, reserveCards2 } from "./playerTwoSlice"
+import {
+  addCard2,
+  payJewels2,
+  checkWin,
+  reserveCards2,
+  addScroll2,
+  takeScroll2,
+} from "./playerTwoSlice"
 import { addToBag } from "./bagSlice"
+import { takeScrollZone } from "./scrollSlice"
 import { toast } from "react-toastify"
 import crown from "../assets/crown.png"
 import crown2 from "../assets/crown2.jpeg"
@@ -29,10 +39,13 @@ export function Card(props) {
   const playerPermaJewels = useSelector((state) => state.playerOne.permaJewels)
   const playerJewels = useSelector((state) => state.playerOne.jewels)
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
+  const p1Scrolls = useSelector((state) => state.playerOne.scrolls)
   const startingInfo = useSelector((state) => state.home.info)
   const playerPermaJewels2 = useSelector((state) => state.playerTwo.permaJewels)
   const playerJewels2 = useSelector((state) => state.playerTwo.jewels)
+  const p2Scrolls = useSelector((state) => state.playerTwo.scrolls)
   const cardStatus = useSelector((state) => state.card.status)
+  const scrollZone = useSelector((state) => state.scrolls.scrolls)
   const tempJewels = Object.entries(
     startingInfo[0] === 1 ? playerJewels : playerJewels2,
   )
@@ -182,6 +195,55 @@ export function Card(props) {
       toast.error("Opponent has nothing you can steal")
     }
   }
+
+  function scrollAction() {
+    if (currPlayer === 1) {
+      if (scrollZone > 0) {
+        dispatch(takeScrollZone())
+        dispatch(addScroll())
+        socket.emit("scroll-card", { take: 0, give: 1 })
+      } else if (p2Scrolls > 0) {
+        dispatch(takeScroll2())
+        dispatch(addScroll())
+        socket.emit("scroll-card", { take: 2, give: 1 })
+      } else {
+        toast.error("Cannot take any scrolls")
+      }
+    } else {
+      if (scrollZone > 0) {
+        dispatch(takeScrollZone())
+        dispatch(addScroll2())
+        socket.emit("scroll-card", { take: 0, give: 2 })
+      } else if (p2Scrolls > 0) {
+        dispatch(takeScroll())
+        dispatch(addScroll2())
+        socket.emit("scroll-card", { take: 1, give: 2 })
+      } else {
+        toast.error("Cannot take any scrolls")
+      }
+    }
+  }
+
+  function goAgain() {
+    dispatch(addToBag(cart))
+    if (currPlayer === 1) {
+      dispatch(payJewels(cart))
+      dispatch(addCard(props))
+    } else {
+      dispatch(payJewels2(cart))
+      dispatch(addCard2(props))
+    }
+    dispatch(checkWin())
+
+    props.removeCard()
+    toast.success("you get to go again!")
+    socket.emit("skip-turn", {
+      cart: cart,
+      props: props,
+      index: props.index,
+    })
+  }
+
   function buyCard() {
     if (currPlayer === startingInfo[0]) {
       let check = true
@@ -193,11 +255,21 @@ export function Card(props) {
       }
       if (check) {
         //TODO: Here check if there is a special action
+        //ALERT there are cards with two actions
         if (props.special === "wild") {
           wildAction()
-        } else if (props.special === "steal" || props.special === "none") {
+        } else if (props.special === "steal") {
+          //steal doesn't switch players
           stealAction()
           regularCardAction()
+        } else if (props.special === "scroll") {
+          scrollAction()
+          regularCardAction()
+        } else if (props.special === "gem") {
+          //
+          regularCardAction()
+        } else if (props.special === "again" || props.special === "none") {
+          goAgain()
         } else {
           regularCardAction()
         }

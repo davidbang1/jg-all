@@ -55,8 +55,16 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("steal-jewel2", arg);
   });
 
+  socket.on("scroll-card", (arg) => {
+    socket.broadcast.emit("scroll-card2", arg);
+  });
+
   socket.on("reserve-card", (arg) => {
     socket.broadcast.emit("reserve-card2", arg);
+  });
+
+  socket.on("skip-turn", (arg) => {
+    socket.broadcast.emit("skip-turn2", arg);
   });
 
   socket.on("gold-board", (arg) => {
