@@ -280,18 +280,15 @@ export function Card(props) {
         }
       }
       if (check) {
-        //TODO: Here check if there is a special action
-        //ALERT there are cards with two actions
-        if (props.special === "wild") {
+        if (props.special === "wild" || props.color === "wild") {
           wildAction()
         } else if (props.special === "steal") {
-          //steal doesn't switch players
           stealAction()
           regularCardAction()
         } else if (props.special === "scroll") {
           scrollAction()
           regularCardAction()
-        } else if (props.special === "gem" || props.special === "none") {
+        } else if (props.special === "gem") {
           if (bs.includes(props.color)) {
             props.setAction("gem")
             dispatch(setGem([props.color, props.index, cart]))

@@ -64,7 +64,6 @@ export const playerOneSlice = createSlice({
       //calculate end of turn here
       if (state.currPlayer === 1) {
         //end p1 turn
-
         //check win conditions
         let colorPoints = Object.entries(state.points)
         let maxP = 0

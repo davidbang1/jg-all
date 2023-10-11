@@ -87,11 +87,11 @@
         }
       },
       {
-        "color": "colorless",
+        "color": "wild",
         "points": 3,
         "crowns": 0,
         "quantity": 1,
-        "special": ["wild", "again"],
+        "special": "again",
         "requirements": {
           "red": 8
         }
