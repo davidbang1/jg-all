@@ -11,6 +11,7 @@ import { toast } from "react-toastify"
 import { takeScroll } from "./playerOneSlice"
 import { takeScroll2 } from "./playerTwoSlice"
 import { addScroll } from "./scrollSlice"
+import { setStatus } from "./cardsSlice.js"
 
 export function Board(props) {
   const count = useSelector(showBoard)
@@ -40,6 +41,17 @@ export function Board(props) {
     removeThis(x.pot)
     setPot([])
     dispatch(clearBoard(""))
+  })
+
+  socket.off("gem-picked2")
+  socket.on("gem-picked2", (x) => {
+    console.log("socket 2")
+    removeThis([x.ind])
+    if (currPlayer === 1) {
+      dispatch(getJewel([x.jewel]))
+    } else {
+      dispatch(getJewel2([x.jewel]))
+    }
   })
 
   socket.off("use-scroll2")
@@ -96,6 +108,15 @@ export function Board(props) {
     17, 18, 19, 20, 21, 16, 5, 6, 7, 22, 15, 4, 1, 8, 23, 14, 3, 2, 9, 24, 13,
     12, 11, 10, 25,
   ]
+
+  function giveGem(jewel, number, cardInfo) {
+    removeThis([number])
+    currPlayer === 1
+      ? dispatch(getJewel([jewel]))
+      : dispatch(getJewel2([jewel]))
+    socket.emit("gem-picked", { jewel: jewel, ind: number })
+    dispatch(setStatus([jewel, cardInfo[1], cardInfo[2]]))
+  }
 
   //unused
   function shuffle(array) {
@@ -217,6 +238,7 @@ export function Board(props) {
                         getJewel={getJewel}
                         getJewel2={getJewel2}
                         removeThis={removeThis}
+                        giveGem={giveGem}
                       />,
                     ])
                   : rows[rows.length - 1].push(
@@ -230,6 +252,7 @@ export function Board(props) {
                         getJewel={getJewel}
                         getJewel2={getJewel2}
                         removeThis={removeThis}
+                        giveGem={giveGem}
                       />,
                     )) && rows
               )

@@ -59,6 +59,10 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("scroll-card2", arg);
   });
 
+  socket.on("gem-picked", (arg) => {
+    socket.broadcast.emit("gem-picked2", arg);
+  });
+
   socket.on("reserve-card", (arg) => {
     socket.broadcast.emit("reserve-card2", arg);
   });

@@ -14,6 +14,7 @@ function Cell(props) {
   const cardStatus = useSelector((state) => state.card.status)
   const goldNum = useSelector((state) => state.cards.goldNum)
   const startingInfo = useSelector((state) => state.home.info)
+  const currGem = useSelector((state) => state.cards.gem)
 
   function withinLine(pot, newNum) {
     //math to check pot is in a line
@@ -49,6 +50,15 @@ function Cell(props) {
   function handleClick(pot) {
     //TODO Fix clicking between gold and pink
     if (currPlayer === startingInfo[0]) {
+      if (props.action === "gem") {
+        if (currGem[0] === props.jewel) {
+          toast.success("Added to jewels")
+          props.giveGem(props.jewel, props.number, currGem)
+          props.setAction("")
+        } else {
+          toast.error("Needs to be " + currGem[0])
+        }
+      }
       if (props.action === "scroll") {
         if (props.jewel && props.jewel !== "gold") {
           if (currPlayer === 1) {

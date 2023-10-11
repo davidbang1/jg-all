@@ -22,6 +22,7 @@ import {
 } from "./playerTwoSlice"
 import { addToBag } from "./bagSlice"
 import { takeScrollZone } from "./scrollSlice"
+import { setGem } from "./cardsSlice"
 import { toast } from "react-toastify"
 import crown from "../assets/crown.png"
 import crown2 from "../assets/crown2.jpeg"
@@ -46,6 +47,10 @@ export function Card(props) {
   const p2Scrolls = useSelector((state) => state.playerTwo.scrolls)
   const cardStatus = useSelector((state) => state.card.status)
   const scrollZone = useSelector((state) => state.scrolls.scrolls)
+  const bs = useSelector((state) => state.board.grid)
+  const gemGrabbed = useSelector((state) => state.cards.gem)
+  const cardsStatus = useSelector((state) => state.cards.status2)
+
   const tempJewels = Object.entries(
     startingInfo[0] === 1 ? playerJewels : playerJewels2,
   )
@@ -56,6 +61,27 @@ export function Card(props) {
   useEffect(() => {
     setWhatIHave(JSON.parse(JSON.stringify(tempJewels)))
   }, [playerJewels, playerJewels2])
+
+  useEffect(() => {
+    if (cardsStatus[1] === props.index) {
+      dispatch(addToBag(cardsStatus[2]))
+      if (currPlayer === 1) {
+        dispatch(payJewels(cardsStatus[2]))
+        dispatch(addCard(props))
+      } else {
+        dispatch(payJewels2(cardsStatus[2]))
+        dispatch(addCard2(props))
+      }
+      dispatch(setCurrPlayer())
+      dispatch(checkWin())
+      props.removeCard()
+      socket.emit("buy-card", {
+        cart: cardsStatus[2],
+        props: props,
+        index: props.index,
+      })
+    }
+  }, [cardsStatus])
 
   function handleOpen() {
     setOpen(true)
@@ -265,10 +291,16 @@ export function Card(props) {
         } else if (props.special === "scroll") {
           scrollAction()
           regularCardAction()
-        } else if (props.special === "gem") {
-          //
-          regularCardAction()
-        } else if (props.special === "again" || props.special === "none") {
+        } else if (props.special === "gem" || props.special === "none") {
+          if (bs.includes(props.color)) {
+            props.setAction("gem")
+            dispatch(setGem([props.color, props.index, cart]))
+            toast.info("Pick a " + props.color + " gem from the board")
+          } else {
+            toast.info("Gem cannot be used right now")
+            regularCardAction()
+          }
+        } else if (props.special === "again") {
           goAgain()
         } else {
           regularCardAction()

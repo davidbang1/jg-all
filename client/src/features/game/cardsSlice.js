@@ -6,6 +6,8 @@ const initialState = {
   threeDeck: [],
   twoDeck: [],
   oneDeck: [],
+  gem: [],
+  status2: "",
 }
 console.log("cardsslice")
 export const cardsSlice = createSlice({
@@ -34,6 +36,12 @@ export const cardsSlice = createSlice({
     setDeck1: (state, x) => {
       state.oneDeck = x.payload
     },
+    setGem: (state, x) => {
+      state.gem = x.payload
+    },
+    setStatus: (state, x) => {
+      state.status2 = x.payload
+    },
   },
 
   extraReducers: () => {},
@@ -47,6 +55,8 @@ export const {
   setDeck3,
   setDeck2,
   setDeck1,
+  setGem,
+  setStatus,
 } = cardsSlice.actions
 
 export default cardsSlice.reducer

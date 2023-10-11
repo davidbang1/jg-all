@@ -13,12 +13,12 @@ const initialState = {
     pearl: 0,
   },
   jewels: {
-    white: 0,
-    blue: 0,
-    green: 0,
-    red: 0,
-    black: 0,
-    pearl: 0,
+    white: 10,
+    blue: 10,
+    green: 1,
+    red: 10,
+    black: 10,
+    pearl: 10,
     gold: 0,
   },
   points: { white: 0, blue: 0, green: 0, red: 0, black: 0, pearl: 0, gold: 0 },
@@ -64,6 +64,9 @@ export const playerTwoSlice = createSlice({
     takeScroll2: (state) => {
       state.scrolls -= 1
     },
+    addScroll2: (state) => {
+      state.scrolls += 1
+    },
     checkWin: (state) => {
       if (state.currPlayer === 2) {
         //end p1 turn
@@ -84,7 +87,7 @@ export const playerTwoSlice = createSlice({
         if (Object.values(state.jewels).reduce((a, b) => a + b, 0) > 10) {
           state.status = "reduce"
         }
-        state.currPlayer = 2
+        // state.currPlayer = 2
       }
     },
     clearStatus2: (state) => {
@@ -108,6 +111,7 @@ export const {
   clearStatus2,
   reserveCards2,
   setId2,
+  addScroll2,
 } = playerTwoSlice.actions
 
 // The function below is called a selector and allows us to select a value from

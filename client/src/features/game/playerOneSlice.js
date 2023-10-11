@@ -4,24 +4,24 @@ const initialState = {
   playerId: "",
   permaJewels: {
     white: 0,
-    blue: 0,
-    green: 0,
+    blue: 10,
+    green: 10,
     red: 0,
     black: 0,
     pearl: 0,
   },
   jewels: {
-    white: 0,
-    blue: 0,
-    green: 0,
-    red: 0,
-    black: 0,
-    pearl: 0,
+    white: 10,
+    blue: 10,
+    green: 10,
+    red: 10,
+    black: 10,
+    pearl: 10,
     gold: 0,
   },
   points: { white: 0, blue: 0, green: 0, red: 0, black: 0, pearl: 0, gold: 0 },
   crowns: 0,
-  scrolls: 0,
+  scrolls: 2,
   currPlayer: 1,
   reservedCards: ["hello", "bye"],
 }
@@ -50,14 +50,15 @@ export const playerOneSlice = createSlice({
       }
     },
     payJewels: (state, x) => {
-      console.log("playeroneslice")
-
       for (let i = 0; i < x.payload.length; i++) {
         state.jewels[x.payload[i]] -= 1
       }
     },
     takeScroll: (state) => {
       state.scrolls -= 1
+    },
+    addScroll: (state) => {
+      state.scrolls += 1
     },
     setCurrPlayer: (state) => {
       //calculate end of turn here
@@ -106,6 +107,7 @@ export const {
   clearStatus,
   reserveCards,
   setId,
+  addScroll,
 } = playerOneSlice.actions
 
 // The function below is called a selector and allows us to select a value from
