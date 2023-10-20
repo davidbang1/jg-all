@@ -98,8 +98,9 @@ export function Cards(props) {
 
   socket.off("reserve-card2")
   socket.on("reserve-card2", (x) => {
-    addToPlayer(x.index)
-    if (currPlayer === 1) {
+    //add x.playernum
+    addToPlayer(x.index, x.playerNum)
+    if (x.playerNum === 1) {
       dispatch(reserveCards(x.info))
     } else {
       dispatch(reserveCards2(x.info))
@@ -149,14 +150,15 @@ export function Cards(props) {
     }
   }
 
-  function addToPlayer(index) {
+  function addToPlayer(index, playerNum) {
+    //add player
     removeCard(index)
     //add option for top of deck button
 
     //todo: currplayer isn't switching
-    if (props.currPlayer === 1) {
+    if (playerNum === 1) {
       dispatch(getJewel(["gold"]))
-    } else {
+    } else if (playerNum === 2) {
       dispatch(getJewel2(["gold"]))
     }
     dispatch(setCurrPlayer())

@@ -141,7 +141,6 @@ export function Card(props) {
   function handleClick(e) {
     //for reserving a card gold
     if (cardStatus) {
-      props.addToPlayer(props.index)
       let info = {
         color: props.color,
         points: props.points,
@@ -153,11 +152,24 @@ export function Card(props) {
       }
       //todo
       if (currPlayer === 1) {
+        props.addToPlayer(props.index, 1)
+
         dispatch(reserveCards(info))
+        socket.emit("reserve-card", {
+          index: props.index,
+          info: info,
+          playerNum: 1,
+        })
       } else {
+        props.addToPlayer(props.index, 2)
+
         dispatch(reserveCards2(info))
+        socket.emit("reserve-card", {
+          index: props.index,
+          info: info,
+          playerNum: 2,
+        })
       }
-      socket.emit("reserve-card", { index: props.index, info: info })
     }
   }
 
