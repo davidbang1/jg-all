@@ -16,8 +16,7 @@ export const cardsSlice = createSlice({
   reducers: {
     emptyBag: (state) => {},
     startReserve: (state, b) => {
-      state.status = b.payload[0]
-      state.currJewel = b.payload[1]
+      state.status = b.payload
     },
     setCardList: (state, c) => {
       state.cardList.push(c.payload.props)

@@ -3,16 +3,14 @@ import { useSelector, useDispatch } from "react-redux"
 import { Card } from "../game/Card"
 import {
   setCardList,
-  setDecks,
-  setGoldNum,
   startReserve,
   setDeck3,
   setDeck2,
   setDeck1,
 } from "./cardsSlice"
-import { showBoard, setBoard, clearBoard } from "./boardSlice"
+import { clearBoard } from "./boardSlice"
 import { socket } from "../../app/hooks/socket"
-import playerOneSlice, {
+import {
   addCard,
   payJewels,
   setCurrPlayer,
@@ -95,7 +93,13 @@ export function Cards(props) {
 
   socket.off("reserve-card2")
   socket.on("reserve-card2", (x) => {
-    //add x.playernum
+    if (x.deck === 3) {
+      dispatch(setDeck3(threeCost.splice(-1)))
+    } else if (x.deck === 2) {
+      dispatch(setDeck2(twoCost.splice(-1)))
+    } else {
+      dispatch(setDeck1(oneCost.splice(-1)))
+    }
     addToPlayer(x.index, x.playerNum)
     if (x.playerNum === 1) {
       dispatch(reserveCards(x.info))
@@ -149,7 +153,9 @@ export function Cards(props) {
 
   function addToPlayer(index, playerNum) {
     //add player
-    removeCard(index)
+    if (index >= 0) {
+      removeCard(index)
+    }
     //add option for top of deck button
     if (playerNum === 1) {
       dispatch(getJewel(["gold"]))
@@ -204,19 +210,22 @@ export function Cards(props) {
     setCard9(getCard(oneCost, 9))
   }, [])
 
-  //TODO: for reserving top of deck
-  // when gold is Clicked, reserve button can be clicked
-  // pop the top of the deck and add to player
-  // emit
-
-  function handle3Click(e) {
-    //for reserving top of deck number 3
-    toast.success("staring 3click")
-    console.log("sadsfdaf")
+  useEffect(() => {
     if (cardStatus) {
-      toast.success("staring goood")
+      document.getElementById("button1").disabled = false
+      document.getElementById("button2").disabled = false
+      document.getElementById("button3").disabled = false
+    } else {
+      document.getElementById("button1").disabled = true
+      document.getElementById("button2").disabled = true
+      document.getElementById("button3").disabled = true
+    }
+  }, [cardStatus])
 
+  function handleClick3() {
+    if (cardStatus) {
       let card = threeCost[threeCost.length - 1]
+      dispatch(setDeck3(threeCost.splice(-1)))
       let info = {
         color: card.color,
         points: card.points,
@@ -226,29 +235,98 @@ export function Cards(props) {
         requirements: card.requirements,
       }
       if (currPlayer === 1) {
-        addToPlayer(props.index, 1)
-        //no removing of index
+        addToPlayer(-1, 1)
         dispatch(reserveCards(info))
         socket.emit("reserve-card", {
-          index: props.index,
+          index: -1,
           info: info,
           playerNum: 1,
+          deck: 3,
         })
       } else {
-        addToPlayer(props.index, 2)
+        addToPlayer(-1, 2)
         dispatch(reserveCards2(info))
         socket.emit("reserve-card", {
-          index: props.index,
+          index: -1,
           info: info,
           playerNum: 2,
+          deck: 3,
         })
       }
     }
   }
 
+  function handleClick2() {
+    if (cardStatus) {
+      let card = twoCost[twoCost.length - 1]
+      dispatch(setDeck3(twoCost.splice(-1)))
+      let info = {
+        color: card.color,
+        points: card.points,
+        crowns: card.crowns,
+        quantity: card.quantity,
+        special: card.special,
+        requirements: card.requirements,
+      }
+      if (currPlayer === 1) {
+        addToPlayer(-1, 1)
+        dispatch(reserveCards(info))
+        socket.emit("reserve-card", {
+          index: -1,
+          info: info,
+          playerNum: 1,
+          deck: 2,
+        })
+      } else {
+        addToPlayer(-1, 2)
+        dispatch(reserveCards2(info))
+        socket.emit("reserve-card", {
+          index: -1,
+          info: info,
+          playerNum: 2,
+          deck: 2,
+        })
+      }
+    }
+  }
+  function handleClick1() {
+    if (cardStatus) {
+      let card = oneCost[oneCost.length - 1]
+      dispatch(setDeck1(oneCost.splice(-1)))
+      let info = {
+        color: card.color,
+        points: card.points,
+        crowns: card.crowns,
+        quantity: card.quantity,
+        special: card.special,
+        requirements: card.requirements,
+      }
+      if (currPlayer === 1) {
+        addToPlayer(-1, 1)
+        dispatch(reserveCards(info))
+        socket.emit("reserve-card", {
+          index: -1,
+          info: info,
+          playerNum: 1,
+          deck: 1,
+        })
+      } else {
+        addToPlayer(-1, 2)
+        dispatch(reserveCards2(info))
+        socket.emit("reserve-card", {
+          index: -1,
+          info: info,
+          playerNum: 2,
+          deck: 1,
+        })
+      }
+    }
+  }
   return (
     <div>
-      <button onClick={() => handle3Click()}>reserve</button>
+      <button id="button1" onClick={() => handleClick3()}>
+        reserve top
+      </button>
       Tier Three: {threeCost.length} remaining
       <div className="cardBox">
         {card1}
@@ -256,14 +334,18 @@ export function Cards(props) {
         {card3}
       </div>
       <div>
-        <button>reserve</button>
+        <button id="button2" onClick={() => handleClick2()}>
+          reserve top
+        </button>
         Tier Two: {twoCost.length} remaining
         {card4}
         {card5}
         {card6}
       </div>
       <div>
-        <button>reserve</button>
+        <button id="button3" onClick={() => handleClick1()}>
+          reserve top
+        </button>
         Tier One: {oneCost.length} remaining
         {card7}
         {card8}
