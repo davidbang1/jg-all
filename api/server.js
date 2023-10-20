@@ -34,7 +34,7 @@ io.on("connection", (socket) => {
       });
     }
   });
-
+  //TODO: to(roomId)  IF BROADCAST ACROSS ROOMS
   socket.on("remove-this", (arg) => {
     socket.broadcast.emit("remove-this2", arg);
   });
@@ -62,7 +62,9 @@ io.on("connection", (socket) => {
   socket.on("gem-picked", (arg) => {
     socket.broadcast.emit("gem-picked2", arg);
   });
-
+  socket.on("again-royal", (arg) => {
+    socket.broadcast.emit("again-royal2", arg);
+  });
   socket.on("reserve-card", (arg) => {
     socket.broadcast.emit("reserve-card2", arg);
   });

@@ -20,8 +20,6 @@ export function JewelDuel(props) {
   const startingInfo = useSelector((state) => state.home.info)
 
   useEffect(() => {
-    console.log(startingInfo)
-    //props.roomId
     socket.emit("join-room", props.roomId, startingInfo[1], startingInfo[0])
     if (startingInfo[0] === 1) {
       setPeerId(startingInfo[1])

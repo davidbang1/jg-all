@@ -5,11 +5,13 @@ import { clearStatus } from "./playerOneSlice"
 import { clearStatus2 } from "./playerTwoSlice"
 import { Button, Modal, Box } from "@mui/material"
 import { toast } from "react-toastify"
+import { Card } from "../game/Card"
 
 export function PlayerOne(props) {
   const dispatch = useDispatch()
   const playerJewels = useSelector((state) => state.playerOne.jewels)
   const playerPoints = useSelector((state) => state.playerOne.points)
+  const playerTotalPoints = useSelector((state) => state.playerOne.totalPoints)
   const playerCrowns = useSelector((state) => state.playerOne.crowns)
   const playerPermaJewels = useSelector((state) => state.playerOne.permaJewels)
   const playerScrolls = useSelector((state) => state.playerOne.scrolls)
@@ -19,6 +21,8 @@ export function PlayerOne(props) {
   const winC2 = useSelector((state) => state.playerTwo.status)
   const reservedCards = useSelector((state) => state.playerOne.reservedCards)
   const startingInfo = useSelector((state) => state.home.info)
+
+  const [myCards, setMyCards] = useState(reservedCards)
 
   function handleOpen() {
     setOpen(true)
@@ -46,6 +50,12 @@ export function PlayerOne(props) {
     setBText("Use Scroll")
   }, [playerScrolls])
 
+  function removeCard(index) {
+    console.log("hi")
+    //todo reservecards splice at index
+    //emit
+    setOpen(false)
+  }
   function handleClick() {
     //cancel scroll use
     if (playerScrolls > 0) {
@@ -80,13 +90,14 @@ export function PlayerOne(props) {
       {myPoints.map((point, id) => (
         <div key={id}>{point}</div>
       ))}
+      Total: {playerTotalPoints}
       <br />
       Crowns: {playerCrowns}
       <br />
       Scrolls: {playerScrolls}
       <br />
       <button id="reserved-cards1" onClick={viewCards}>
-        View Reserved Cards
+        View Reserved Cards {reservedCards.length}
       </button>
       <br />
       <b>Permanent Jewels:</b>
@@ -103,7 +114,29 @@ export function PlayerOne(props) {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="modalStyle">{reservedCards}</Box>
+        <Box className="modalStyle">
+          {reservedCards.length > 0
+            ? reservedCards.map((item, index) => {
+                return (
+                  <Card
+                    index={index}
+                    color={item.color}
+                    points={item.points}
+                    crowns={item.crowns}
+                    quantity={item.quantity}
+                    special={item.special}
+                    requirements={item.requirements}
+                    removeCard={() => removeCard(index)}
+                    action={props.action}
+                    setAction={props.setAction}
+                    reserved={true}
+                    //addToPlayer={addToPlayer}
+                  />
+                )
+              })
+            : "No Reserved Cards"}
+        </Box>
+        {/* add button to buy */}
       </Modal>
     </div>
   )

@@ -4,6 +4,9 @@ import { addToBag } from "./bagSlice"
 import { socket } from "../../app/hooks/socket"
 import { addCard, payJewels, setCurrPlayer, getJewel } from "./playerOneSlice"
 import { addCard2, payJewels2, checkWin, getJewel2 } from "./playerTwoSlice"
+import { toast } from "react-toastify"
+import { setRoyalAction } from "./royalSlice"
+import { useEffect } from "react"
 
 export function JewelsModal(props) {
   const dispatch = useDispatch()
@@ -19,7 +22,9 @@ export function JewelsModal(props) {
       dispatch(getJewel2([x.jewel]))
     }
   })
-
+  // useEffect(() => {
+  //   handleClick(props.action)
+  // }, [props.action])
   function handleClick(jewel) {
     if (props.action === "steal") {
       if (currPlayer === 2) {
@@ -54,6 +59,9 @@ export function JewelsModal(props) {
         index: props.index,
       })
       props.handleClose()
+    } else if (props.action === "royals") {
+      dispatch(setRoyalAction(jewel))
+      //steal, again, scroll,none
     } else {
       //use gold as a color
     }

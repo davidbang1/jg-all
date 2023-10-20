@@ -79,6 +79,7 @@ export function Card(props) {
         cart: cardsStatus[2],
         props: props,
         index: props.index,
+        reserved: props.reserved,
       })
     }
   }, [cardsStatus])
@@ -108,7 +109,10 @@ export function Card(props) {
   }
   const reqs = Object.entries(props.requirements)
 
+  console.log("card gold")
+
   function addToCart(item) {
+    //gold first item ['gold',10]
     if (item[1] > 0) {
       for (let i = 0; i < afterPerm.length; i++) {
         if (afterPerm[i][0] === item[0] && afterPerm[i][1] > 0) {
@@ -129,23 +133,25 @@ export function Card(props) {
         }
       }
     } else {
-      toast.error("Insufficient funs")
+      toast.error("Insufficient funds")
     }
     //gold is wild
   }
 
   function handleClick(e) {
-    //for reserving a card
+    //for reserving a card gold
     if (cardStatus) {
       props.addToPlayer(props.index)
-      let info = [
-        props.color,
-        props.points,
-        props.crowns,
-        props.quantity,
-        props.special,
-        reqs,
-      ]
+      let info = {
+        color: props.color,
+        points: props.points,
+        crowns: props.crowns,
+        quantity: props.quantity,
+        special: props.special,
+        // requirements: reqs,
+        requirements: props.requirements,
+      }
+      //todo
       if (currPlayer === 1) {
         dispatch(reserveCards(info))
       } else {
@@ -173,8 +179,10 @@ export function Card(props) {
       cart: cart,
       props: props,
       index: props.index,
+      reserved: props.reserved,
     })
   }
+
   function wildAction() {
     setJMAction("colorless")
     const temp = []
@@ -260,6 +268,7 @@ export function Card(props) {
       dispatch(addCard2(props))
     }
     dispatch(checkWin())
+    //works for p2??
 
     props.removeCard()
     toast.success("you get to go again!")
@@ -267,6 +276,7 @@ export function Card(props) {
       cart: cart,
       props: props,
       index: props.index,
+      reserved: props.reserved,
     })
   }
 

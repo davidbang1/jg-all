@@ -69,9 +69,15 @@ export function Cards(props) {
     dispatch(checkWin())
     toast.info("opponent goes again")
     //remove card and set new decks
-    removeCard(x.index)
+    if (!x.reserved) {
+      removeCard(x.index)
+    }
   })
-
+  socket.off("again-royal2")
+  socket.on("again-royal2", (x) => {
+    dispatch(setCurrPlayer())
+    toast.info("opponent goes again")
+  })
   socket.off("buy-card2")
   socket.on("buy-card2", (x) => {
     dispatch(addToBag(x.cart))
@@ -85,7 +91,9 @@ export function Cards(props) {
     dispatch(setCurrPlayer())
     dispatch(checkWin())
     //remove card and set new decks
-    removeCard(x.index)
+    if (!x.reserved) {
+      removeCard(x.index)
+    }
   })
 
   socket.off("reserve-card2")
