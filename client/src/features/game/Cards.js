@@ -12,7 +12,7 @@ import {
 } from "./cardsSlice"
 import { showBoard, setBoard, clearBoard } from "./boardSlice"
 import { socket } from "../../app/hooks/socket"
-import {
+import playerOneSlice, {
   addCard,
   payJewels,
   setCurrPlayer,
@@ -31,9 +31,6 @@ import { toast } from "react-toastify"
 
 export function Cards(props) {
   const dispatch = useDispatch()
-  const [count3, setCount3] = useState(13)
-  const [count2, setCount2] = useState(24)
-  const [count1, setCount1] = useState(30)
   const [card1, setCard1] = useState(0)
   const [card2, setCard2] = useState(0)
   const [card3, setCard3] = useState(0)
@@ -154,8 +151,6 @@ export function Cards(props) {
     //add player
     removeCard(index)
     //add option for top of deck button
-
-    //todo: currplayer isn't switching
     if (playerNum === 1) {
       dispatch(getJewel(["gold"]))
     } else if (playerNum === 2) {
@@ -209,10 +204,52 @@ export function Cards(props) {
     setCard9(getCard(oneCost, 9))
   }, [])
 
+  //TODO: for reserving top of deck
+  // when gold is Clicked, reserve button can be clicked
+  // pop the top of the deck and add to player
+  // emit
+
+  function handle3Click(e) {
+    //for reserving top of deck number 3
+    toast.success("staring 3click")
+    console.log("sadsfdaf")
+    if (cardStatus) {
+      toast.success("staring goood")
+
+      let card = threeCost[threeCost.length - 1]
+      let info = {
+        color: card.color,
+        points: card.points,
+        crowns: card.crowns,
+        quantity: card.quantity,
+        special: card.special,
+        requirements: card.requirements,
+      }
+      if (currPlayer === 1) {
+        addToPlayer(props.index, 1)
+        //no removing of index
+        dispatch(reserveCards(info))
+        socket.emit("reserve-card", {
+          index: props.index,
+          info: info,
+          playerNum: 1,
+        })
+      } else {
+        addToPlayer(props.index, 2)
+        dispatch(reserveCards2(info))
+        socket.emit("reserve-card", {
+          index: props.index,
+          info: info,
+          playerNum: 2,
+        })
+      }
+    }
+  }
+
   return (
     <div>
-      Cards Tier Three {count3}
-      <button>reserve</button>
+      <button onClick={() => handle3Click()}>reserve</button>
+      Tier Three: {threeCost.length} remaining
       <div className="cardBox">
         {card1}
         {card2}
@@ -220,14 +257,14 @@ export function Cards(props) {
       </div>
       <div>
         <button>reserve</button>
-        Tier Two
+        Tier Two: {twoCost.length} remaining
         {card4}
         {card5}
         {card6}
       </div>
       <div>
         <button>reserve</button>
-        Tier One
+        Tier One: {oneCost.length} remaining
         {card7}
         {card8}
         {card9}
