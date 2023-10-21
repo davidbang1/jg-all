@@ -107,6 +107,9 @@ export const playerOneSlice = createSlice({
     reserveCards: (state, x) => {
       state.reservedCards.push(x.payload)
     },
+    removeReserved: (state, x) => {
+      state.reservedCards.splice(x.payload, 1)
+    },
     addRoyal: (state, x) => {
       state.totalPoints += x.payload.points
       state.myRoyals.push(x.payload.royal)
@@ -133,6 +136,7 @@ export const {
   addScroll,
   addRoyal,
   removeRoyal,
+  removeReserved,
 } = playerOneSlice.actions
 
 export const showBoard = (state) => state.playerOne.jewels

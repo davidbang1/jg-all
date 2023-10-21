@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { clearBoard } from "./boardSlice"
-import { clearStatus } from "./playerOneSlice"
+import { clearStatus, removeReserved, setCurrPlayer } from "./playerOneSlice"
 import { clearStatus2 } from "./playerTwoSlice"
 import { Button, Modal, Box } from "@mui/material"
 import { toast } from "react-toastify"
 import { Card } from "../game/Card"
+import { socket } from "../../app/hooks/socket"
 
 export function PlayerOne(props) {
   const dispatch = useDispatch()
@@ -35,6 +36,12 @@ export function PlayerOne(props) {
     }
   }, [])
 
+  // socket.off("remove-reserved2")
+  // socket.on("remove-reserved2", (x) => {
+  //   toast.info("aferfrfrfrfrfrfrfrf")
+  //   dispatch(removeReserved(x.index))
+  // })
+
   function handleClose() {
     dispatch(clearStatus())
     dispatch(clearStatus2())
@@ -42,7 +49,6 @@ export function PlayerOne(props) {
   }
   console.log("playerone")
   function viewCards() {
-    console.log("asdf")
     setOpen(true)
   }
   useEffect(() => {
@@ -50,12 +56,12 @@ export function PlayerOne(props) {
     setBText("Use Scroll")
   }, [playerScrolls])
 
-  function removeCard(index) {
-    console.log("hi")
-    //todo reservecards splice at index
-    //emit
+  function removeCard(i) {
+    dispatch(removeReserved(i))
+    socket.emit("remove-reserved", { index: i })
     setOpen(false)
   }
+
   function handleClick() {
     //cancel scroll use
     if (playerScrolls > 0) {

@@ -107,6 +107,9 @@ export const playerTwoSlice = createSlice({
     reserveCards2: (state, x) => {
       state.reservedCards.push(x.payload)
     },
+    removeReserved2: (state, x) => {
+      state.reservedCards.splice(x.payload, 1)
+    },
     addRoyal2: (state, x) => {
       state.totalPoints += x.payload.points
       //sync points and total points
@@ -129,6 +132,7 @@ export const {
   setId2,
   addScroll2,
   addRoyal2,
+  removeReserved2,
 } = playerTwoSlice.actions
 
 // The function below is called a selector and allows us to select a value from

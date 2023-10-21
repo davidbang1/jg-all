@@ -50,6 +50,10 @@ io.on("connection", (socket) => {
         socket.broadcast.to(roomId).emit("fill-board2", arg);
       });
 
+      socket.on("remove-reserved", (arg) => {
+        socket.broadcast.to(roomId).emit("remove-reserved2", arg);
+      });
+
       socket.on("steal-jewel", (arg) => {
         socket.broadcast.to(roomId).emit("steal-jewel2", arg);
       });

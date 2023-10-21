@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { clearBoard } from "./boardSlice"
 import { Button, Modal, Box } from "@mui/material"
 import { clearStatus } from "./playerOneSlice"
-import { clearStatus2 } from "./playerTwoSlice"
+import { clearStatus2, removeReserved2 } from "./playerTwoSlice"
 import { Card } from "../game/Card"
 
 export function PlayerTwo(props) {
@@ -60,10 +60,9 @@ export function PlayerTwo(props) {
   const myPerms = Object.entries(playerPermaJewels)
   const myPoints = Object.entries(playerPoints)
 
-  function removeCard(index) {
-    console.log("hi")
-    //todo: reservecards splice at index
-    //emit
+  function removeCard(i) {
+    dispatch(removeReserved2(i))
+    //socket.emit("remove-reserved", { index: i })
     setOpen(false)
   }
 
