@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit"
 
 const initialState = {
-  scrolls: ["s", "s"],
+  scrolls: 2,
   status: "notEmpty",
 }
 
@@ -11,14 +11,17 @@ export const scrollSlice = createSlice({
   reducers: {
     emptyBag: (state) => {},
     addScroll: (state) => {
-      state.scrolls.push("s")
+      state.scrolls += 1
+    },
+    takeScrollZone: (state) => {
+      state.scrolls -= 1
     },
   },
 
   extraReducers: () => {},
 })
 
-export const { emptyBag, addScroll } = scrollSlice.actions
+export const { emptyBag, addScroll, takeScrollZone } = scrollSlice.actions
 
 export const getScrolls = (state) => state.scrolls.scrolls
 

@@ -26,26 +26,76 @@ app.use("/rooms", roomsRouter);
 
 io.on("connection", (socket) => {
   //works
-  socket.on("join-room", (roomId, userId) => {
+  socket.on("join-room", (roomId, userId, position) => {
     socket.join(roomId);
-    // socket.broadcast.to(roomId).emit("user-connected", userId, (response) => {
-    //   //set remote
-    // });
-  });
-  socket.on("hello", (arg, callback) => {
-    socket.broadcast.emit("increment", arg + 1);
-    callback(arg + 1);
-  });
+    if (position === 2) {
+      socket.broadcast.to(roomId).emit("user-connected", userId, (response) => {
+        //set remote
+      });
 
-  socket.on("sendBoard", (arg) => {
-    io.emit("receiveBoard", arg);
-  });
+      //TODO: to(roomId)  IF BROADCAST ACROSS ROOMS
+      socket.on("remove-this", (arg) => {
+        socket.broadcast.to(roomId).emit("remove-this2", arg);
+      });
 
-  // socket.on("sendCards", (arg) => {
-  //   io.emit("receiveCards", arg);
-  // });
-  socket.on("uncaughtException", function (err) {
-    console.log(err);
+      socket.on("buy-card", (arg) => {
+        socket.broadcast.to(roomId).emit("buy-card2", arg);
+      });
+
+      socket.on("use-scroll", (arg) => {
+        socket.broadcast.to(roomId).emit("use-scroll2", arg);
+      });
+
+      socket.on("fill-board", (arg) => {
+        socket.broadcast.to(roomId).emit("fill-board2", arg);
+      });
+
+      socket.on("remove-reserved", (arg) => {
+        socket.broadcast.to(roomId).emit("remove-reserved2", arg);
+      });
+
+      socket.on("steal-jewel", (arg) => {
+        socket.broadcast.to(roomId).emit("steal-jewel2", arg);
+      });
+
+      socket.on("scroll-card", (arg) => {
+        socket.broadcast.to(roomId).emit("scroll-card2", arg);
+      });
+
+      socket.on("gem-picked", (arg) => {
+        socket.broadcast.to(roomId).emit("gem-picked2", arg);
+      });
+      socket.on("again-royal", (arg) => {
+        socket.broadcast.to(roomId).emit("again-royal2", arg);
+      });
+      socket.on("reserve-card", (arg) => {
+        socket.broadcast.to(roomId).emit("reserve-card2", arg);
+      });
+
+      socket.on("skip-turn", (arg) => {
+        socket.broadcast.to(roomId).emit("skip-turn2", arg);
+      });
+
+      socket.on("gold-board", (arg) => {
+        socket.broadcast.to(roomId).emit("gold-board2", arg);
+      });
+
+      socket.on("hello", (arg, callback) => {
+        socket.broadcast.emit("increment", arg + 1);
+        callback(arg + 1);
+      });
+
+      socket.on("sendBoard", (arg) => {
+        io.emit("receiveBoard", arg);
+      });
+
+      // socket.on("sendCards", (arg) => {
+      //   io.emit("receiveCards", arg);
+      // });
+      socket.on("uncaughtException", function (err) {
+        console.log(err);
+      });
+    }
   });
 });
 

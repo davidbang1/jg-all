@@ -15,24 +15,28 @@ import { socket } from "../../app/hooks/socket"
 export function JewelDuel(props) {
   const [peerId, setPeerId] = useState()
   const [remotePeer, setRemotePeer] = useState()
-  // create new peer in here
-  // const peer = useSelector((state) => state.playerOne.peerInfo)
-  // const peer = new Peer()
+  const idData = useSelector((state) => state.playerOne.playerId)
+  const idData2 = useSelector((state) => state.playerTwo.playerId)
+  const startingInfo = useSelector((state) => state.home.info)
+
   useEffect(() => {
-    // peer.on("open", (id) => {
-    //   setPeerId(id)
-    socket.emit("join-room", 10, 10000)
-    // })
+    socket.emit("join-room", props.roomId, startingInfo[1], startingInfo[0])
+    //TODO: store roomid in store, then use in emits with .to(roomid)
+    if (startingInfo[0] === 1) {
+      setPeerId(startingInfo[1])
+    }
   }, [])
+
   socket.on("user-connected", (id, callback) => {
     setRemotePeer(id)
   })
+
   return (
     <div className="App">
       <header className="App-header">
         Jewel Duel! It's Player {props.currPlayer}'s turn
       </header>
-      <body>
+      <div>
         <Grid container>
           <Grid item xs={2}>
             <PlayerOne action={props.action} setAction={props.setAction} />
@@ -45,9 +49,10 @@ export function JewelDuel(props) {
             <Board action={props.action} setAction={props.setAction} />
             <Scrolls />
             <Royals />
-            <br />
-            {peerId} is connected <br />
-            {remotePeer ? remotePeer + "is connected" : "cant find partner"}
+            <hr />
+            {peerId} is player 1 <br />
+            {remotePeer} is player 2 <br />
+            You are Player {startingInfo[0]}
             <br />
           </Grid>
           <Grid item xs={4}>
@@ -58,7 +63,7 @@ export function JewelDuel(props) {
             />
           </Grid>
         </Grid>
-      </body>
+      </div>
     </div>
   )
 }

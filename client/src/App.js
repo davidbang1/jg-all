@@ -8,6 +8,7 @@ import { Home } from "./features/pages/Home"
 import { JewelDuel } from "./features/pages/JewelDuel"
 import { PeerPage } from "./features/pages/PeerPage"
 import { getAllRooms } from "./app/redux/actions"
+import routes, { renderRoutes } from "./routes"
 function App() {
   const [action, setAction] = useState("")
   const [access, setAccess] = useState(true)
@@ -19,7 +20,7 @@ function App() {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    //get room ids an map to routes
+    //not used
     dispatch(getAllRooms()).then((res) => {
       setRooms(res)
       console.log(res)
@@ -44,10 +45,13 @@ function App() {
           path="/hello"
           element={<PeerPage access={access} setAccess={setAccess} />}
         />
+        {/* {renderRoutes(routes)} */}
         <Route
+          exact
           path={roomUUID}
           element={
             <JewelDuel
+              roomId={roomUUID}
               action={action}
               setAction={setAction}
               currPlayer={currPlayer}
@@ -55,29 +59,16 @@ function App() {
           }
         />
         <Route
-          path="/04e3c362-ae4d-4b76-abf8-ed78ada4fe95"
+          path="/24358228-98e0-4b7b-b9fe-7ae3c6209aee"
           element={
             <JewelDuel
+              roomId="/24358228-98e0-4b7b-b9fe-7ae3c6209aee"
               action={action}
               setAction={setAction}
               currPlayer={currPlayer}
             />
           }
         />
-        {rooms?.map((item, index) => {
-          return (
-            <Route
-              path={item}
-              element={
-                <JewelDuel
-                  action={action}
-                  setAction={setAction}
-                  currPlayer={currPlayer}
-                />
-              }
-            />
-          )
-        })}
       </Routes>
     </BrowserRouter>
   )

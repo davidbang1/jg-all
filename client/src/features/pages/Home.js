@@ -11,6 +11,10 @@ import { v4 as uuidv4 } from "uuid"
 import cardData from "../data/cardData.json"
 import { setBag } from "../game/bagSlice"
 import { setDecks } from "../game/cardsSlice"
+import { setId } from "../game/playerOneSlice"
+import { setId2 } from "../game/playerTwoSlice"
+import { socket } from "../../app/hooks/socket"
+import { setInfo } from "../pages/homeSlice"
 
 export function Home(props) {
   const navigate = useNavigate()
@@ -36,6 +40,9 @@ export function Home(props) {
 
   const boardData = useSelector((state) => state.bag.bag)
 
+  socket.on("user-connected", (id, callback) => {
+    setId2(id)
+  })
   function sendCode() {
     let arrayForSort = [...boardData]
     const threeCost = shuffle(cardData[0]["3"])
@@ -43,13 +50,13 @@ export function Home(props) {
     const oneCost = shuffle(cardData[2]["1"])
     shuffle(arrayForSort)
     const roomId = uuidv4()
+    const player1Id = "player1id"
     props.setRoomUUID(roomId)
-    navigate("/" + roomId)
     //set board and three decks
     dispatch(
       createRoom(
         roomId,
-        "fromfrontend2222",
+        player1Id,
         input,
         arrayForSort,
         threeCost,
@@ -59,14 +66,28 @@ export function Home(props) {
     )
     //set to here
     dispatch(setBag(arrayForSort))
+    dispatch(setId(player1Id))
     dispatch(setDecks([threeCost, twoCost, oneCost]))
+    dispatch(setInfo([1, player1Id]))
+    //connect serverwise
+    // socket.emit("join-room", roomId, player1Id) //room,user
+
+    navigate("/" + roomId)
   }
+
   function enterCode() {
-    dispatch(joinRoom("joinimngfromfrontend2222", input2)).then((res) => {
+    const player2Id = "player2id"
+    dispatch(joinRoom(player2Id, input2)).then((res) => {
       props.setRoomUUID(res.name)
       //set board and three decks here
       dispatch(setBag(res.board))
+      dispatch(setId(res.player2))
       dispatch(setDecks([res.threeDeck, res.twoDeck, res.oneDeck]))
+      dispatch(setInfo([2, res.player2]))
+
+      //connect serverwise
+      // socket.emit("join-room", res.name, res.player2) //room,user
+
       navigate("/" + res.name)
     })
   }
