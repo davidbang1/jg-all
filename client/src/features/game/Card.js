@@ -28,10 +28,12 @@ import crown from "../assets/crown.png"
 import crown2 from "../assets/crown2.jpeg"
 import crown3 from "../assets/crown3.jpeg"
 import { socket } from "../../app/hooks/socket"
+import Popover from "@mui/material/Popover"
 
 export function Card(props) {
   const dispatch = useDispatch()
   const [open, setOpen] = useState(false)
+  const [popOpen, setPopOpen] = useState(false)
   const [jOpen, setJOpen] = useState(false)
   const [jmAction, setJMAction] = useState()
   const [jmJewels, setJMJewels] = useState()
@@ -50,6 +52,7 @@ export function Card(props) {
   const bs = useSelector((state) => state.board.grid)
   const gemGrabbed = useSelector((state) => state.cards.gem)
   const cardsStatus = useSelector((state) => state.cards.status2)
+  const [anchorEl, setAnchorEl] = useState(null)
 
   const tempJewels = Object.entries(
     startingInfo[0] === 1 ? playerJewels : playerJewels2,
@@ -103,6 +106,10 @@ export function Card(props) {
     setOpen(false)
   }
 
+  const handlePopClose = () => {
+    setAnchorEl(null)
+    setPopOpen(false)
+  }
   function handleJClose() {
     setCart([])
     setJOpen(false)
@@ -111,9 +118,12 @@ export function Card(props) {
 
   console.log("card gold")
 
-  function addToCart(item) {
-    //gold first item ['gold',10]
-    if (item[1] > 0) {
+  function addToCart(e, item) {
+    if (item[0] === "gold" && item[1] > 0) {
+      //open popover
+      setPopOpen(true)
+      setAnchorEl(e.currentTarget)
+    } else if (item[1] > 0) {
       for (let i = 0; i < afterPerm.length; i++) {
         if (afterPerm[i][0] === item[0] && afterPerm[i][1] > 0) {
           const temp = JSON.parse(JSON.stringify(afterPerm))
@@ -135,7 +145,26 @@ export function Card(props) {
     } else {
       toast.error("Insufficient funds")
     }
-    //gold is wild
+  }
+
+  function buyWithGold(item) {
+    if (item[1] > 0) {
+      for (let i = 0; i < afterPerm.length; i++) {
+        if (afterPerm[i][0] === item[0] && afterPerm[i][1] > 0) {
+          const temp = JSON.parse(JSON.stringify(afterPerm))
+          const tempHave = JSON.parse(JSON.stringify(whatIHave))
+          temp[i][1] -= 1
+          tempHave[tempHave.length - 1][1] -= 1
+          let tempCart = cart
+          tempCart.push("gold")
+          setWhatIHave(tempHave)
+          setAfterPerm(temp)
+          setCart(tempCart)
+        }
+      }
+    } else {
+      toast.error("Insufficient funds")
+    }
   }
 
   function handleClick(e) {
@@ -339,7 +368,14 @@ export function Card(props) {
       return ""
     }
   }
-
+  const goldOpts = [
+    ["white", 1],
+    ["blue", 1],
+    ["green", 1],
+    ["red", 1],
+    ["black", 1],
+    ["pearl", 1],
+  ]
   return (
     <div className="card" onClick={(e) => handleClick(e)}>
       <Grid container spacing={1} className="cardLayout">
@@ -412,7 +448,7 @@ export function Card(props) {
               <div
                 className={item[0]}
                 key={index}
-                onClick={() => addToCart(item)}
+                onClick={(e) => addToCart(e, item)}
               >
                 {item[1]}
               </div>
@@ -429,6 +465,33 @@ export function Card(props) {
           <Button onClick={() => buyCard()}>BUY</Button>
         </Box>
       </Modal>
+      <Popover
+        id={"id"}
+        open={popOpen}
+        anchorEl={anchorEl}
+        onClose={handlePopClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "center",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        Use Gold as:
+        {goldOpts.map((item, index) => {
+          return (
+            <div
+              className={item[0]}
+              key={index}
+              onClick={() => buyWithGold(item)}
+            >
+              {item[1]}
+            </div>
+          )
+        })}
+      </Popover>
     </div>
   )
 }
