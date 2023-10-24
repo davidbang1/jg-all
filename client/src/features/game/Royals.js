@@ -9,6 +9,7 @@ import {
   takeScroll,
   setCurrPlayer,
   addRoyal,
+  removeRoyal,
 } from "./playerOneSlice"
 import { checkWin, addScroll2, takeScroll2, addRoyal2 } from "./playerTwoSlice"
 import { takeScrollZone } from "./scrollSlice"
@@ -101,13 +102,20 @@ export function Royals() {
       }
     }
   }
+  socket.off("remove-royal2")
+  socket.on("remove-royal2", (x) => {
+    toast.success("soket was called")
+    dispatch(removeRoyal(x.royal))
+  })
 
   function addHelper(p, r) {
+    socket.emit("remove-royal", { royal: royalAction })
     if (startingInfo[0] === 1) {
       dispatch(addRoyal({ points: p, royal: r }))
     } else {
       dispatch(addRoyal2({ points: p, royal: r }))
     }
+    dispatch(removeRoyal(royalAction))
   }
 
   useEffect(() => {
@@ -157,21 +165,15 @@ export function Royals() {
       setJMAction("royals")
     }
   }, [p2Royals])
-  console.log("royals")
-  let arrRoyals = ["1", "2", "3", "4"]
+  // console.log("royals")
+  // let arrRoyals = ["1", "2", "3", "4"]
 
   //show whats there, not test
   return (
     <div>
       Royals
       <br />
-      {test}
-      <br />
-      {test2}
-      <br />
-      {test3}
-      <br />
-      {test4}
+      {royalData}
       <button onClick={openModal}>Royals test</button>
       <JewelsModal
         open={open}

@@ -30,6 +30,7 @@ const initialState = {
   getRoyal: "",
   myRoyals: [],
   royals: ["steal", "again", "scroll", "none"],
+  roomId: "",
 }
 
 export const playerOneSlice = createSlice({
@@ -119,6 +120,14 @@ export const playerOneSlice = createSlice({
     //remove royal payload from royals
     removeRoyal: (state, x) => {
       //state.royals remove
+      const index = state.royals.indexOf(x.payload)
+      if (index > -1) {
+        // only splice array when item is found
+        state.royals.splice(index, 1) // 2nd parameter means remove one item only
+      }
+    },
+    setRoom: (state, x) => {
+      state.roomId = x.payload
     },
   },
   extraReducers: () => {},
@@ -137,6 +146,7 @@ export const {
   addRoyal,
   removeRoyal,
   removeReserved,
+  setRoom,
 } = playerOneSlice.actions
 
 export const showBoard = (state) => state.playerOne.jewels

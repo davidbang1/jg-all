@@ -24,6 +24,7 @@ export function Board(props) {
   const boardStatus = useSelector((state) => state.board.status)
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
   const startingInfo = useSelector((state) => state.home.info)
+  const roomId = useSelector((state) => state.playerOne.roomId)
 
   socket.off("remove-this2")
   socket.on("remove-this2", (x) => {
@@ -87,6 +88,7 @@ export function Board(props) {
       dispatch(emptyBag())
       dispatch(setBoard(final))
       socket.emit("fill-board", { board: final })
+      // socket.broadcast.to(roomId).emit("remove-this2", arg);
     }
   }, [])
 

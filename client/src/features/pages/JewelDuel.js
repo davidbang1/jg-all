@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react"
+import { useSelector, useDispatch } from "react-redux"
 import { Grid } from "@mui/material"
 import { Bag } from "../game/Bag"
 import { Board } from "../game/Board"
@@ -9,24 +10,29 @@ import { Cards } from "../game/Cards"
 import { Scrolls } from "../game/Scrolls"
 import { Royals } from "../game/Royals"
 import useScript from "../../app/hooks/useScript" //delete useScript
-import { useSelector } from "react-redux"
 import { socket } from "../../app/hooks/socket"
-
+import { removeRoyal, setRoom } from "../game/playerOneSlice"
+import { toast } from "react-toastify"
 export function JewelDuel(props) {
+  const dispatch = useDispatch()
+
   const [peerId, setPeerId] = useState()
   const [remotePeer, setRemotePeer] = useState()
   const idData = useSelector((state) => state.playerOne.playerId)
+  const roomId = useSelector((state) => state.playerOne.roomId)
   const idData2 = useSelector((state) => state.playerTwo.playerId)
   const startingInfo = useSelector((state) => state.home.info)
 
   useEffect(() => {
     socket.emit("join-room", props.roomId, startingInfo[1], startingInfo[0])
     //TODO: store roomid in store, then use in emits with .to(roomid)
+    dispatch(setRoom(props.roomId))
     if (startingInfo[0] === 1) {
       setPeerId(startingInfo[1])
     }
   }, [])
 
+  socket.off("user-connected")
   socket.on("user-connected", (id, callback) => {
     setRemotePeer(id)
   })
