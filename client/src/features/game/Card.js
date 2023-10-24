@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import "./card.css"
 import "../index.css"
-import { JewelsModal } from "./JewelsModal"
+import { JewelsModal } from "../game/JewelsModal"
 import { Paper, Button, Modal, Box, Grid } from "@mui/material"
 import {
   addCard,
