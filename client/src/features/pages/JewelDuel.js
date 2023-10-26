@@ -13,6 +13,9 @@ import useScript from "../../app/hooks/useScript" //delete useScript
 import { socket } from "../../app/hooks/socket"
 import { removeRoyal, setRoom } from "../game/playerOneSlice"
 import { toast } from "react-toastify"
+import { Button, Modal, Box } from "@mui/material"
+import { useNavigate } from "react-router-dom"
+
 export function JewelDuel(props) {
   const dispatch = useDispatch()
 
@@ -22,7 +25,12 @@ export function JewelDuel(props) {
   const roomId = useSelector((state) => state.playerOne.roomId)
   const idData2 = useSelector((state) => state.playerTwo.playerId)
   const startingInfo = useSelector((state) => state.home.info)
+  const p1Status = useSelector((state) => state.playerOne.status)
+  const p2Status = useSelector((state) => state.playerTwo.status)
+  const navigate = useNavigate()
 
+  const [open, setOpen] = useState(false)
+  const [message, setMessage] = useState("")
   useEffect(() => {
     socket.emit("join-room", props.roomId, startingInfo[1], startingInfo[0])
     //TODO: store roomid in store, then use in emits with .to(roomid)
@@ -36,8 +44,24 @@ export function JewelDuel(props) {
   socket.on("user-connected", (id, callback) => {
     setRemotePeer(id)
   })
+  function handleClose() {
+    console.log("")
+  }
+  function buttonClick() {
+    navigate("/")
+    window.location.reload()
+  }
 
-  //modal for win / loss screen , return to home option
+  useEffect(() => {
+    if (p1Status === "win" || p2Status === "win") {
+      setOpen(true)
+      setMessage("You WIN!")
+    } else if (p1Status === "lose" || p2Status === "lose") {
+      setOpen(true)
+      setMessage("You lose :(")
+    }
+  }, [p1Status, p2Status])
+
   return (
     <div className="App">
       <header className="App-header">
@@ -70,6 +94,12 @@ export function JewelDuel(props) {
             />
           </Grid>
         </Grid>
+        <Modal open={open} onClose={handleClose}>
+          <Box className="modalStyle">
+            {message}
+            <Button onClick={() => buttonClick()}>Exit</Button>
+          </Box>
+        </Modal>
       </div>
     </div>
   )

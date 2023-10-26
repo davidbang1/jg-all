@@ -20,8 +20,8 @@ const initialState = {
     gold: 10,
   },
   points: { white: 0, blue: 0, green: 0, red: 0, black: 0, pearl: 0, gold: 0 },
-  totalPoints: 0,
-  crowns: 0,
+  totalPoints: 19,
+  crowns: 9,
   scrolls: 0,
   currPlayer: 1,
   reservedCards: [],
@@ -87,24 +87,24 @@ export const playerOneSlice = createSlice({
         }
       }
       if (x.payload === 1) {
-        if (state.crowns >= 10 || state.totalPoints >= 20 || maxP >= 10) {
-          toast.success("Congrats, you win!")
-          state.status = "win"
-        }
         //check num jewels
         if (Object.values(state.jewels).reduce((a, b) => a + b, 0) > 10) {
           toast.error("You have too many jewels, get rid of some")
           state.status = "reduce"
         }
+        if (state.crowns >= 10 || state.totalPoints >= 20 || maxP >= 10) {
+          toast.success("Congrats, you win!")
+          state.status = "win"
+        }
       }
       if (x.payload === 2) {
         if (state.crowns >= 10 || state.totalPoints >= 20 || maxP >= 10) {
           toast.success("Opponent Won")
+          state.status = "lose"
         }
       }
     },
     setCurrPlayer: (state) => {
-      //do only change player,make a separate function for check win conditions
       if (state.currPlayer === 1) {
         state.currPlayer = 2
       } else {
