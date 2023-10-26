@@ -34,7 +34,6 @@ io.on("connection", (socket) => {
         //set remote
       });
     }
-    //TODO: to(roomId)  IF BROADCAST ACROSS ROOMS
     socket.on("remove-royal", (arg) => {
       socket.to(roomId).emit("remove-royal2", arg);
     });

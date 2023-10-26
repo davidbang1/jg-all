@@ -14,17 +14,17 @@ const initialState = {
     pearl: 0,
   },
   jewels: {
-    white: 0,
-    blue: 0,
-    green: 0,
-    red: 0,
-    black: 0,
-    pearl: 0,
+    white: 10,
+    blue: 10,
+    green: 10,
+    red: 10,
+    black: 10,
+    pearl: 10,
     gold: 0,
   },
-  points: { white: 0, blue: 0, green: 0, red: 0, black: 0, pearl: 0, gold: 0 },
-  totalPoints: 0,
-  crowns: 0,
+  points: { white: 9, blue: 0, green: 0, red: 0, black: 0, pearl: 0, gold: 0 },
+  totalPoints: 18,
+  crowns: 9,
   scrolls: 1,
   reservedCards: [],
   gotFirst2: false,
@@ -79,14 +79,14 @@ export const playerTwoSlice = createSlice({
       state.scrolls += 1
     },
     checkWin2: (state, x) => {
-      if (x.payload === 2) {
-        let colorPoints = Object.entries(state.points)
-        let maxP = 0
-        for (let i = 0; i < colorPoints.length; i++) {
-          if (colorPoints[i][1] > maxP) {
-            maxP = colorPoints[i][1]
-          }
+      let colorPoints = Object.entries(state.points)
+      let maxP = 0
+      for (let i = 0; i < colorPoints.length; i++) {
+        if (colorPoints[i][1] > maxP) {
+          maxP = colorPoints[i][1]
         }
+      }
+      if (x.payload === 2) {
         if (state.crowns >= 10 || state.totalPoints >= 20 || maxP >= 10) {
           toast.success("Congrats, you win!")
           state.status = "win"
@@ -95,6 +95,12 @@ export const playerTwoSlice = createSlice({
         if (Object.values(state.jewels).reduce((a, b) => a + b, 0) > 10) {
           toast.error("You have too many jewels, get rid of some")
           state.status = "reduce"
+        }
+      }
+      if (x.payload === 1) {
+        if (state.crowns >= 10 || state.totalPoints >= 20 || maxP >= 10) {
+          toast.success("Opponent Won")
+          state.status = "lose"
         }
       }
     },

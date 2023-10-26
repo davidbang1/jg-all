@@ -100,11 +100,16 @@ export function Royals() {
   }
   socket.off("remove-royal2")
   socket.on("remove-royal2", (x) => {
+    if (startingInfo[0] === 2) {
+      dispatch(addRoyal({ points: x.points, royal: x.royal }))
+    } else {
+      dispatch(addRoyal2({ points: x.points, royal: x.royal }))
+    }
     dispatch(removeRoyal(x.royal))
   })
 
   function addHelper(p, r) {
-    socket.emit("remove-royal", { royal: royalAction })
+    socket.emit("remove-royal", { points: p, royal: r })
     if (startingInfo[0] === 1) {
       dispatch(addRoyal({ points: p, royal: r }))
     } else {

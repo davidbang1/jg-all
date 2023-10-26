@@ -37,6 +37,7 @@ export function JewelDuel(props) {
     setRemotePeer(id)
   })
 
+  //modal for win / loss screen , return to home option
   return (
     <div className="App">
       <header className="App-header">
