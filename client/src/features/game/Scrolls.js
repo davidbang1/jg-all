@@ -32,6 +32,9 @@ export function Scrolls() {
         break
       default:
     }
+    if (x.tell) {
+      toast.info("opponent took 3 of a kind or 2 pearls so you get a scroll")
+    }
   })
 
   return <div>Scrolls {count}</div>

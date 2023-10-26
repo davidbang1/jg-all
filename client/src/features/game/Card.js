@@ -288,7 +288,7 @@ export function Card(props) {
         dispatch(takeScrollZone())
         dispatch(addScroll2())
         socket.emit("scroll-card", { take: 0, give: 2 })
-      } else if (p2Scrolls > 0) {
+      } else if (p1Scrolls > 0) {
         dispatch(takeScroll())
         dispatch(addScroll2())
         socket.emit("scroll-card", { take: 1, give: 2 })

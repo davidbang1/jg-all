@@ -3,14 +3,23 @@ import { useSelector, useDispatch } from "react-redux"
 import Cell from "./Cell.js"
 import { showBoard, setBoard, clearBoard } from "./boardSlice"
 import { emptyBag, fillBoard, setBag } from "./bagSlice"
-import { getJewel, setCurrPlayer, checkWin } from "./playerOneSlice.js"
-import { getJewel2, checkWin2 } from "./playerTwoSlice.js"
+import {
+  getJewel,
+  setCurrPlayer,
+  checkWin,
+  addScroll,
+  takeScroll,
+} from "./playerOneSlice.js"
+import {
+  getJewel2,
+  checkWin2,
+  addScroll2,
+  takeScroll2,
+} from "./playerTwoSlice.js"
 import "../index.css"
 import { socket } from "../../app/hooks/socket"
 import { toast } from "react-toastify"
-import { takeScroll } from "./playerOneSlice"
-import { takeScroll2 } from "./playerTwoSlice"
-import { addScroll } from "./scrollSlice"
+import { addScrollZone, takeScrollZone } from "./scrollSlice"
 import { setStatus } from "./cardsSlice.js"
 
 export function Board(props) {
@@ -25,6 +34,9 @@ export function Board(props) {
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
   const startingInfo = useSelector((state) => state.home.info)
   const roomId = useSelector((state) => state.playerOne.roomId)
+  const scrollZone = useSelector((state) => state.scrolls.scrolls)
+  const p1Scrolls = useSelector((state) => state.playerOne.scrolls)
+  const p2Scrolls = useSelector((state) => state.playerTwo.scrolls)
 
   socket.off("remove-this2")
   socket.on("remove-this2", (x) => {
@@ -59,7 +71,7 @@ export function Board(props) {
   socket.off("use-scroll2")
   socket.on("use-scroll2", (x) => {
     removeThis([x.number])
-    dispatch(addScroll())
+    dispatch(addScrollZone())
     if (currPlayer === 1) {
       dispatch(getJewel([x.jewel]))
       dispatch(takeScroll())
@@ -201,6 +213,38 @@ export function Board(props) {
         document.getElementById(pot[i]).style.backgroundColor = "white"
       }
       removeThis(pot)
+      const filtered = takeThese.filter((word) => word === "pearl")
+      if (
+        (takeThese[0] === takeThese[1] && takeThese[1] === takeThese[2]) ||
+        filtered.length === 2
+      ) {
+        toast.info("giving scroll to opponent")
+        if (currPlayer === 2) {
+          if (scrollZone > 0) {
+            dispatch(takeScrollZone())
+            dispatch(addScroll())
+            socket.emit("scroll-card", { take: 0, give: 1, tell: true })
+          } else if (p2Scrolls > 0) {
+            dispatch(takeScroll2())
+            dispatch(addScroll())
+            socket.emit("scroll-card", { take: 2, give: 1, tell: true })
+          } else {
+            toast.error("Cannot take any scrolls")
+          }
+        } else {
+          if (scrollZone > 0) {
+            dispatch(takeScrollZone())
+            dispatch(addScroll2())
+            socket.emit("scroll-card", { take: 0, give: 2, tell: true })
+          } else if (p1Scrolls > 0) {
+            dispatch(takeScroll())
+            dispatch(addScroll2())
+            socket.emit("scroll-card", { take: 1, give: 2, tell: true })
+          } else {
+            toast.error("Cannot take any scrolls")
+          }
+        }
+      }
       socket.emit("remove-this", { pot: pot, takeThese: takeThese })
 
       currPlayer === 1

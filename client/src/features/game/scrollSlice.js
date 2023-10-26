@@ -10,7 +10,7 @@ export const scrollSlice = createSlice({
   initialState,
   reducers: {
     emptyBag: (state) => {},
-    addScroll: (state) => {
+    addScrollZone: (state) => {
       state.scrolls += 1
     },
     takeScrollZone: (state) => {
@@ -21,7 +21,7 @@ export const scrollSlice = createSlice({
   extraReducers: () => {},
 })
 
-export const { emptyBag, addScroll, takeScrollZone } = scrollSlice.actions
+export const { emptyBag, addScrollZone, takeScrollZone } = scrollSlice.actions
 
 export const getScrolls = (state) => state.scrolls.scrolls
 

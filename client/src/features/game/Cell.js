@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { takeScroll } from "./playerOneSlice"
 import { takeScroll2 } from "./playerTwoSlice"
-import { addScroll } from "./scrollSlice"
+import { addScrollZone } from "./scrollSlice"
 import { startReserve } from "./cardsSlice"
 import { toast } from "react-toastify"
 import { socket } from "../../app/hooks/socket"
@@ -70,7 +70,7 @@ function Cell(props) {
           }
           props.removeThis([props.number])
           props.setAction("")
-          dispatch(addScroll())
+          dispatch(addScrollZone())
           socket.emit("use-scroll", {
             jewel: props.jewel,
             number: props.number,
