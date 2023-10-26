@@ -100,7 +100,7 @@ export function Cards(props) {
       dispatch(setDeck3(threeCost.splice(-1)))
     } else if (x.deck === 2) {
       dispatch(setDeck2(twoCost.splice(-1)))
-    } else {
+    } else if (x.deck === 1) {
       dispatch(setDeck1(oneCost.splice(-1)))
     }
     addToPlayer(x.index, x.playerNum)

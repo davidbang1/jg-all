@@ -36,11 +36,10 @@ export function PlayerOne(props) {
     }
   }, [])
 
-  // socket.off("remove-reserved2")
-  // socket.on("remove-reserved2", (x) => {
-  //   toast.info("aferfrfrfrfrfrfrfrf")
-  //   dispatch(removeReserved(x.index))
-  // })
+  socket.off("remove-reserved2")
+  socket.on("remove-reserved2", (x) => {
+    dispatch(removeReserved(x.index))
+  })
 
   function handleClose() {
     dispatch(clearStatus())
