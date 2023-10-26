@@ -2,8 +2,14 @@ import { Modal, Box } from "@mui/material"
 import { useSelector, useDispatch } from "react-redux"
 import { addToBag } from "./bagSlice"
 import { socket } from "../../app/hooks/socket"
-import { addCard, payJewels, setCurrPlayer, getJewel } from "./playerOneSlice"
-import { addCard2, payJewels2, checkWin, getJewel2 } from "./playerTwoSlice"
+import {
+  addCard,
+  payJewels,
+  setCurrPlayer,
+  getJewel,
+  checkWin,
+} from "./playerOneSlice"
+import { addCard2, payJewels2, checkWin2, getJewel2 } from "./playerTwoSlice"
 import { toast } from "react-toastify"
 import { setRoyalAction } from "./royalSlice"
 import { useEffect } from "react"
@@ -11,6 +17,7 @@ import { useEffect } from "react"
 export function JewelsModal(props) {
   const dispatch = useDispatch()
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
+  const startingInfo = useSelector((state) => state.home.info)
 
   socket.off("steal-jewel2")
   socket.on("steal-jewel2", (x) => {
@@ -49,7 +56,8 @@ export function JewelsModal(props) {
         dispatch(addCard2(obj))
       }
       dispatch(setCurrPlayer())
-      dispatch(checkWin())
+      dispatch(checkWin(startingInfo[0]))
+      dispatch(checkWin2(startingInfo[0]))
 
       props.removeCard()
 

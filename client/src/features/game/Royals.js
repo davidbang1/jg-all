@@ -10,8 +10,9 @@ import {
   setCurrPlayer,
   addRoyal,
   removeRoyal,
+  checkWin,
 } from "./playerOneSlice"
-import { checkWin, addScroll2, takeScroll2, addRoyal2 } from "./playerTwoSlice"
+import { checkWin2, addScroll2, takeScroll2, addRoyal2 } from "./playerTwoSlice"
 import { takeScrollZone } from "./scrollSlice"
 import { socket } from "../../app/hooks/socket"
 
@@ -44,7 +45,8 @@ export function Royals() {
   const [jmJewels, setJMJewels] = useState(royalData)
 
   function goAgain() {
-    dispatch(checkWin())
+    dispatch(checkWin(startingInfo[0]))
+    dispatch(checkWin2(startingInfo[0]))
     toast.success("Go again!")
     socket.emit("again-royal")
   }

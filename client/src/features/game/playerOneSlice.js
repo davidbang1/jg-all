@@ -77,26 +77,31 @@ export const playerOneSlice = createSlice({
     addScroll: (state) => {
       state.scrolls += 1
     },
+    checkWin: (state, x) => {
+      // check win conditions
+      if (x.payload === 1) {
+        let colorPoints = Object.entries(state.points)
+        let maxP = 0
+        for (let i = 0; i < colorPoints.length; i++) {
+          if (colorPoints[i][1] > maxP) {
+            maxP = colorPoints[i][1]
+          }
+        }
+        let pointsTotal = Object.values(state.points).reduce((a, b) => a + b, 0)
+        if (state.crowns >= 10 || pointsTotal >= 20 || maxP >= 10) {
+          toast.success("Congrats, you win!")
+          state.status = "win"
+        }
+        //check num jewels
+        if (Object.values(state.jewels).reduce((a, b) => a + b, 0) > 10) {
+          toast.error("You have too many jewels, get rid of some")
+          state.status = "reduce"
+        }
+      }
+    },
     setCurrPlayer: (state) => {
       //do only change player,make a separate function for check win conditions
       if (state.currPlayer === 1) {
-        //end p1 turn
-        //check win conditions
-        // let colorPoints = Object.entries(state.points)
-        // let maxP = 0
-        // for (let i = 0; i < colorPoints.length; i++) {
-        //   if (colorPoints[i][1] > maxP) {
-        //     maxP = colorPoints[i][1]
-        //   }
-        // }
-        // let pointsTotal = Object.values(state.points).reduce((a, b) => a + b, 0)
-        // if (state.crowns >= 10 || pointsTotal >= 20 || maxP >= 10) {
-        //   state.status = "win"
-        // }
-        // //check num jewels
-        // if (Object.values(state.jewels).reduce((a, b) => a + b, 0) > 10) {
-        //   state.status = "reduce"
-        // }
         state.currPlayer = 2
       } else {
         state.currPlayer = 1
@@ -115,15 +120,10 @@ export const playerOneSlice = createSlice({
       state.totalPoints += x.payload.points
       state.myRoyals.push(x.payload.royal)
     },
-
-    //removeRoyal
-    //remove royal payload from royals
     removeRoyal: (state, x) => {
-      //state.royals remove
       const index = state.royals.indexOf(x.payload)
       if (index > -1) {
-        // only splice array when item is found
-        state.royals.splice(index, 1) // 2nd parameter means remove one item only
+        state.royals.splice(index, 1)
       }
     },
     setRoom: (state, x) => {
@@ -147,6 +147,7 @@ export const {
   removeRoyal,
   removeReserved,
   setRoom,
+  checkWin,
 } = playerOneSlice.actions
 
 export const showBoard = (state) => state.playerOne.jewels

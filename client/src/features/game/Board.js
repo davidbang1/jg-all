@@ -3,8 +3,8 @@ import { useSelector, useDispatch } from "react-redux"
 import Cell from "./Cell.js"
 import { showBoard, setBoard, clearBoard } from "./boardSlice"
 import { emptyBag, fillBoard, setBag } from "./bagSlice"
-import { getJewel, setCurrPlayer } from "./playerOneSlice.js"
-import { getJewel2, checkWin } from "./playerTwoSlice.js"
+import { getJewel, setCurrPlayer, checkWin } from "./playerOneSlice.js"
+import { getJewel2, checkWin2 } from "./playerTwoSlice.js"
 import "../index.css"
 import { socket } from "../../app/hooks/socket"
 import { toast } from "react-toastify"
@@ -34,7 +34,8 @@ export function Board(props) {
       ? dispatch(getJewel(x.takeThese))
       : dispatch(getJewel2(x.takeThese))
     dispatch(setCurrPlayer())
-    dispatch(checkWin())
+    dispatch(checkWin(startingInfo[0]))
+    dispatch(checkWin2(startingInfo[0]))
   })
 
   socket.off("gold-board2")
@@ -207,7 +208,8 @@ export function Board(props) {
         : dispatch(getJewel2(takeThese))
 
       dispatch(setCurrPlayer())
-      dispatch(checkWin())
+      dispatch(checkWin(startingInfo[0]))
+      dispatch(checkWin2(startingInfo[0]))
 
       setPot([])
     } else {

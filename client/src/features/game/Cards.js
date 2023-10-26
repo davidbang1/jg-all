@@ -16,11 +16,12 @@ import {
   setCurrPlayer,
   reserveCards,
   getJewel,
+  checkWin,
 } from "./playerOneSlice"
 import {
   addCard2,
   payJewels2,
-  checkWin,
+  checkWin2,
   reserveCards2,
   getJewel2,
 } from "./playerTwoSlice"
@@ -61,7 +62,8 @@ export function Cards(props) {
       dispatch(payJewels2(x.cart))
       dispatch(addCard2(x.props))
     }
-    dispatch(checkWin())
+    dispatch(checkWin(startingInfo[0]))
+    dispatch(checkWin2(startingInfo[0]))
     toast.info("opponent goes again")
     //remove card and set new decks
     if (!x.reserved) {
@@ -84,7 +86,8 @@ export function Cards(props) {
       dispatch(addCard2(x.props))
     }
     dispatch(setCurrPlayer())
-    dispatch(checkWin())
+    dispatch(checkWin(startingInfo[0]))
+    dispatch(checkWin2(startingInfo[0]))
     //remove card and set new decks
     if (!x.reserved) {
       removeCard(x.index)
@@ -163,7 +166,8 @@ export function Cards(props) {
       dispatch(getJewel2(["gold"]))
     }
     dispatch(setCurrPlayer())
-    dispatch(checkWin())
+    dispatch(checkWin(startingInfo[0]))
+    dispatch(checkWin2(startingInfo[0]))
     dispatch(clearBoard("gold"))
     dispatch(startReserve(false))
   }

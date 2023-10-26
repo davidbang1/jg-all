@@ -14,12 +14,12 @@ const initialState = {
     pearl: 0,
   },
   jewels: {
-    white: 10,
-    blue: 10,
-    green: 10,
-    red: 10,
-    black: 10,
-    pearl: 10,
+    white: 0,
+    blue: 0,
+    green: 0,
+    red: 0,
+    black: 0,
+    pearl: 0,
     gold: 0,
   },
   points: { white: 0, blue: 0, green: 0, red: 0, black: 0, pearl: 0, gold: 0 },
@@ -78,11 +78,8 @@ export const playerTwoSlice = createSlice({
     addScroll2: (state) => {
       state.scrolls += 1
     },
-    checkWin: (state) => {
-      if (state.currPlayer === 2) {
-        //end p1 turn
-
-        //check win conditions
+    checkWin2: (state, x) => {
+      if (x.payload === 2) {
         let colorPoints = Object.entries(state.points)
         let maxP = 0
         for (let i = 0; i < colorPoints.length; i++) {
@@ -91,14 +88,15 @@ export const playerTwoSlice = createSlice({
           }
         }
         let pointsTotal = Object.values(state.points).reduce((a, b) => a + b, 0)
-        if (state.crowns >= 10 || pointsTotal > 20 || maxP >= 10) {
+        if (state.crowns >= 10 || pointsTotal >= 20 || maxP >= 10) {
+          toast.success("Congrats, you win!")
           state.status = "win"
         }
         //check num jewels
         if (Object.values(state.jewels).reduce((a, b) => a + b, 0) > 10) {
+          toast.error("You have too many jewels, get rid of some")
           state.status = "reduce"
         }
-        // state.currPlayer = 2
       }
     },
     clearStatus2: (state) => {
@@ -126,7 +124,7 @@ export const {
   getJewel2,
   payJewels2,
   takeScroll2,
-  checkWin,
+  checkWin2,
   clearStatus2,
   reserveCards2,
   setId2,

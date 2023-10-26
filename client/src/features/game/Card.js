@@ -11,11 +11,12 @@ import {
   reserveCards,
   addScroll,
   takeScroll,
+  checkWin,
 } from "./playerOneSlice"
 import {
   addCard2,
   payJewels2,
-  checkWin,
+  checkWin2,
   reserveCards2,
   addScroll2,
   takeScroll2,
@@ -76,7 +77,8 @@ export function Card(props) {
         dispatch(addCard2(props))
       }
       dispatch(setCurrPlayer())
-      dispatch(checkWin())
+      dispatch(checkWin(startingInfo[0]))
+      dispatch(checkWin2(startingInfo[0]))
       props.removeCard()
       socket.emit("buy-card", {
         cart: cardsStatus[2],
@@ -208,7 +210,8 @@ export function Card(props) {
       dispatch(addCard2(props))
     }
     dispatch(setCurrPlayer())
-    dispatch(checkWin())
+    dispatch(checkWin(startingInfo[0]))
+    dispatch(checkWin2(startingInfo[0]))
 
     props.removeCard()
 
@@ -304,7 +307,8 @@ export function Card(props) {
       dispatch(payJewels2(cart))
       dispatch(addCard2(props))
     }
-    dispatch(checkWin())
+    dispatch(checkWin(startingInfo[0]))
+    dispatch(checkWin2(startingInfo[0]))
     //works for p2??
 
     props.removeCard()
