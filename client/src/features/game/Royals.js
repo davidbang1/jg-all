@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import data from "../data/royalsData.json"
 import { toast } from "react-toastify"
 import { JewelsModal } from "../game/JewelsModal"
 //import royalData from "../data/royalsData.json"
@@ -18,11 +17,6 @@ import { socket } from "../../app/hooks/socket"
 
 export function Royals() {
   const dispatch = useDispatch()
-
-  let test = data[0].image
-  let test2 = data[1].image
-  let test3 = data[2].image
-  let test4 = data[3].image
   const royalData = useSelector((state) => state.playerOne.royals)
   const p1Royals = useSelector((state) => state.playerOne.getRoyal)
   const p2Royals = useSelector((state) => state.playerTwo.getRoyal2)
@@ -106,7 +100,6 @@ export function Royals() {
   }
   socket.off("remove-royal2")
   socket.on("remove-royal2", (x) => {
-    toast.success("soket was called")
     dispatch(removeRoyal(x.royal))
   })
 
@@ -167,10 +160,7 @@ export function Royals() {
       setJMAction("royals")
     }
   }, [p2Royals])
-  // console.log("royals")
-  // let arrRoyals = ["1", "2", "3", "4"]
 
-  //show whats there, not test
   return (
     <div>
       Royals

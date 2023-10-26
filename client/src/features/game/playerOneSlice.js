@@ -87,8 +87,7 @@ export const playerOneSlice = createSlice({
             maxP = colorPoints[i][1]
           }
         }
-        let pointsTotal = Object.values(state.points).reduce((a, b) => a + b, 0)
-        if (state.crowns >= 10 || pointsTotal >= 20 || maxP >= 10) {
+        if (state.crowns >= 10 || state.totalPoints >= 20 || maxP >= 10) {
           toast.success("Congrats, you win!")
           state.status = "win"
         }

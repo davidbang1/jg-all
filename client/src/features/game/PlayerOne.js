@@ -142,7 +142,6 @@ export function PlayerOne(props) {
               })
             : "No Reserved Cards"}
         </Box>
-        {/* add button to buy */}
       </Modal>
     </div>
   )

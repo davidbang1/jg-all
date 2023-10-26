@@ -104,7 +104,7 @@ export function PlayerTwo(props) {
         aria-describedby="modal-modal-description"
       >
         <Box className="modalStyle">
-          {reservedCards
+          {reservedCards.length > 0
             ? reservedCards.map((item, index) => {
                 return (
                   <Card
