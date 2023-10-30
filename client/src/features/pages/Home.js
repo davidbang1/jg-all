@@ -126,9 +126,6 @@ export function Home(props) {
       <button aria-label="Decrement value" onClick={() => enterCode()}>
         Join Room and this is the password
       </button>
-      <button aria-label="Decrement value" onClick={() => test()}>
-        Test button
-      </button>
     </div>
   )
 }

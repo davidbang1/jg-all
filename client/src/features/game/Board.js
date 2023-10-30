@@ -174,6 +174,7 @@ export function Board(props) {
       toast.error("not your turn")
     }
   }
+
   function takeJewels() {
     if (currPlayer === startingInfo[0]) {
       //double check pot is not separated
@@ -227,7 +228,6 @@ export function Board(props) {
         }
       }
       socket.emit("remove-this", { pot: pot, takeThese: takeThese })
-
       currPlayer === 1
         ? dispatch(getJewel(takeThese))
         : dispatch(getJewel2(takeThese))

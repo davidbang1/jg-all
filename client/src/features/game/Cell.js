@@ -85,16 +85,24 @@ function Cell(props) {
               "white"
             dispatch(startReserve(false))
             pot.splice(0, 1)
-          } else {
+            props.setAction("")
+          } else if (pot.length === 0) {
             document.getElementById(props.number).style.backgroundColor = "gold"
-            // props.setAction("reserve")
             dispatch(startReserve(true))
             pot.push(props.number)
+            props.setAction("gold")
+          } else {
+            toast.error("Cannot take gold with other jewels")
           }
           //once reserved, reset the gold click
         }
         //adds to pot if within line
-        if (props.jewel && props.jewel !== "gold" && props.action === "") {
+        if (
+          props.jewel &&
+          props.jewel !== "gold" &&
+          props.action === "" &&
+          pot[0] !== "gold"
+        ) {
           if (pot.includes(props.number)) {
             const index = pot.indexOf(props.number)
             if (index > -1) {

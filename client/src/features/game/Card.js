@@ -192,6 +192,7 @@ export function Card(props) {
           playerNum: 2,
         })
       }
+      props.setAction("")
     }
   }
 
