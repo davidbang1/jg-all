@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import Cell from "./Cell.js"
-import { showBoard, setBoard, clearBoard } from "./boardSlice"
-import { emptyBag, fillBoard, setBag } from "./bagSlice"
+import { setBoard, clearBoard } from "./boardSlice"
+import { emptyBag } from "./bagSlice"
 import {
   getJewel,
   setCurrPlayer,
@@ -23,11 +23,9 @@ import { addScrollZone, takeScrollZone } from "./scrollSlice"
 import { setStatus } from "./cardsSlice.js"
 
 export function Board(props) {
-  const count = useSelector(showBoard)
   const dispatch = useDispatch()
   const [grid, setGrid] = useState([])
   const [pot, setPot] = useState([])
-
   const data = useSelector((state) => state.bag.bag)
   const boardState = useSelector((state) => state.board.grid)
   const boardStatus = useSelector((state) => state.board.status)
@@ -40,7 +38,6 @@ export function Board(props) {
 
   socket.off("remove-this2")
   socket.on("remove-this2", (x) => {
-    //dispatch(clearBoard("clean"))
     removeThis(x.pot)
     currPlayer === 1
       ? dispatch(getJewel(x.takeThese))
@@ -101,7 +98,6 @@ export function Board(props) {
       dispatch(emptyBag())
       dispatch(setBoard(final))
       socket.emit("fill-board", { board: final })
-      // socket.broadcast.to(roomId).emit("remove-this2", arg);
     }
   }, [])
 
@@ -131,21 +127,6 @@ export function Board(props) {
       : dispatch(getJewel2([jewel]))
     socket.emit("gem-picked", { jewel: jewel, ind: number })
     dispatch(setStatus([jewel, cardInfo[1], cardInfo[2]]))
-  }
-
-  //unused
-  function shuffle(array) {
-    let currentIndex = array.length,
-      randomIndex
-    while (currentIndex > 0) {
-      randomIndex = Math.floor(Math.random() * currentIndex)
-      currentIndex--
-      ;[array[currentIndex], array[randomIndex]] = [
-        array[randomIndex],
-        array[currentIndex],
-      ]
-    }
-    return array
   }
 
   function removeThis(x) {

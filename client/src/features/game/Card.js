@@ -44,14 +44,13 @@ export function Card(props) {
   const playerJewels = useSelector((state) => state.playerOne.jewels)
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
   const p1Scrolls = useSelector((state) => state.playerOne.scrolls)
+  const p2Scrolls = useSelector((state) => state.playerTwo.scrolls)
   const startingInfo = useSelector((state) => state.home.info)
   const playerPermaJewels2 = useSelector((state) => state.playerTwo.permaJewels)
   const playerJewels2 = useSelector((state) => state.playerTwo.jewels)
-  const p2Scrolls = useSelector((state) => state.playerTwo.scrolls)
   const cardStatus = useSelector((state) => state.card.status)
   const scrollZone = useSelector((state) => state.scrolls.scrolls)
   const bs = useSelector((state) => state.board.grid)
-  const gemGrabbed = useSelector((state) => state.cards.gem)
   const cardsStatus = useSelector((state) => state.cards.status2)
   const [anchorEl, setAnchorEl] = useState(null)
 
@@ -118,11 +117,8 @@ export function Card(props) {
   }
   const reqs = Object.entries(props.requirements)
 
-  console.log("card gold")
-
   function addToCart(e, item) {
     if (item[0] === "gold" && item[1] > 0) {
-      //open popover
       setPopOpen(true)
       setAnchorEl(e.currentTarget)
     } else if (item[1] > 0) {
@@ -132,7 +128,6 @@ export function Card(props) {
           const tempHave = JSON.parse(JSON.stringify(whatIHave))
           temp[i][1] -= 1
           for (let j = 0; j < tempHave.length; j++) {
-            //find color in temphave and reduce by 1
             if (tempHave[j][0] === item[0]) {
               tempHave[j][1] -= 1
             }
@@ -309,8 +304,6 @@ export function Card(props) {
     }
     dispatch(checkWin(startingInfo[0]))
     dispatch(checkWin2(startingInfo[0]))
-    //works for p2??
-
     props.removeCard()
     toast.success("you get to go again!")
     socket.emit("skip-turn", {
@@ -462,7 +455,6 @@ export function Card(props) {
           You will pay:
           {cart.map((item, index) => {
             // TODO: improve look, not all in a vertical line
-            // return <div key={index} className={item}></div>
             return item
           })}
           <br />
