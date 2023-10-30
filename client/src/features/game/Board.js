@@ -176,7 +176,7 @@ export function Board(props) {
   }
 
   function takeJewels() {
-    if (currPlayer === startingInfo[0]) {
+    if (currPlayer === startingInfo[0] && props.action !== "gold") {
       //double check pot is not separated
       if (pot.length === 2) {
         if (
@@ -237,6 +237,8 @@ export function Board(props) {
       dispatch(checkWin2(startingInfo[0]))
 
       setPot([])
+    } else if (props.action === "gold") {
+      toast.info("Pick a card to reserve")
     } else {
       toast.error("not ur turn")
     }
