@@ -34,6 +34,12 @@ io.on("connection", (socket) => {
         //set remote
       });
     }
+    socket.on("remove-extra", (arg) => {
+      socket.to(roomId).emit("remove-extra2", arg);
+    });
+    socket.on("remove-extra3", (arg) => {
+      socket.to(roomId).emit("remove-extra4", arg);
+    });
     socket.on("remove-royal", (arg) => {
       socket.to(roomId).emit("remove-royal2", arg);
     });

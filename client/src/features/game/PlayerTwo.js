@@ -3,8 +3,11 @@ import { useSelector, useDispatch } from "react-redux"
 import { clearBoard } from "./boardSlice"
 import { Button, Modal, Box } from "@mui/material"
 import { clearStatus } from "./playerOneSlice"
-import { clearStatus2, removeReserved2 } from "./playerTwoSlice"
+import { clearStatus2, removeReserved2, payJewels2 } from "./playerTwoSlice"
 import { Card } from "../game/Card"
+import { addToBag } from "./bagSlice"
+import { socket } from "../../app/hooks/socket"
+import { toast } from "react-toastify"
 
 export function PlayerTwo(props) {
   const dispatch = useDispatch()
@@ -16,9 +19,22 @@ export function PlayerTwo(props) {
   const playerScrolls = useSelector((state) => state.playerTwo.scrolls)
   const reservedCards = useSelector((state) => state.playerTwo.reservedCards)
   const startingInfo = useSelector((state) => state.home.info)
+  const playerStatus = useSelector((state) => state.playerTwo.status)
+  const [pot, setPot] = useState([])
+  const [reduceOpen, setReduceOpen] = useState(false)
 
   const [bText, setBText] = useState("Use Scroll")
   const [open, setOpen] = useState(false)
+
+  const tempJewels = Object.entries(playerJewels)
+  const [whatIHave, setWhatIHave] = useState(
+    JSON.parse(JSON.stringify(tempJewels)),
+  )
+
+  useEffect(() => {
+    setWhatIHave(JSON.parse(JSON.stringify(tempJewels)))
+  }, [playerJewels])
+  const count = whatIHave.reduce((a, b) => a + b[1], 0) - 10
 
   function handleClose() {
     dispatch(clearStatus())
@@ -32,16 +48,67 @@ export function PlayerTwo(props) {
       document.getElementById("reserved-cards2").disabled = true
     }
   }, [])
-  console.log("playerTwo")
 
+  socket.off("remove-extra2")
+  socket.on("remove-extra2", (x) => {
+    dispatch(addToBag(x.pot))
+    dispatch(payJewels2(x.pot))
+    toast.success("paid jewels")
+  })
+
+  function reduceHandleClose() {
+    //shouldn't be able to close
+    // setReduceOpen(false)
+  }
+
+  useEffect(() => {
+    if (playerStatus === "reduce") {
+      toast.info("remove thing")
+      setReduceOpen(true)
+    }
+  }, [playerStatus])
+  function addJewel(item) {
+    if (item[1] > 0 && count > 0) {
+      const tempHave = JSON.parse(JSON.stringify(whatIHave))
+      for (let j = 0; j < tempHave.length; j++) {
+        if (tempHave[j][0] === item[0]) {
+          tempHave[j][1] -= 1
+        }
+      }
+      let tempCart = pot
+      tempCart.push(item[0])
+      setWhatIHave(tempHave)
+      setPot(tempCart)
+    }
+  }
+
+  function removeExtras() {
+    //dispatch add to bag. remove from player
+    if (count <= 0) {
+      dispatch(addToBag(pot))
+      dispatch(payJewels2(pot))
+      for (let i = 0; i < pot.length; i++) {
+        tempJewels[pot[i]] -= 1
+      }
+      //emit
+      socket.emit("remove-extra", { pot: pot })
+      //clear pot
+      setPot([])
+      setReduceOpen(false)
+      dispatch(clearStatus2())
+    } else {
+      toast.error("need to remove jewels")
+    }
+  }
   useEffect(() => {
     //reset button text after successful use of scroll
     setBText("Use Scroll")
   }, [playerScrolls])
+
   function viewCards() {
-    console.log("asdf")
     setOpen(true)
   }
+
   function handleClick() {
     //cancel scroll use
     if (bText === "Use Scroll") {
@@ -62,7 +129,6 @@ export function PlayerTwo(props) {
 
   function removeCard(i) {
     dispatch(removeReserved2(i))
-    //socket.emit("remove-reserved", { index: i })
     setOpen(false)
   }
 
@@ -76,7 +142,6 @@ export function PlayerTwo(props) {
       <br />
       Points:
       {myPoints.map((point, id) => (
-        // <div onClick={() => handleClick()} key={id} name={jewel}>
         <div key={id}>{point}</div>
       ))}
       Total: {playerTotalPoints}
@@ -119,11 +184,28 @@ export function PlayerTwo(props) {
                     action={props.action}
                     setAction={props.setAction}
                     reserved={true}
-                    //addToPlayer={addToPlayer}
                   />
                 )
               })
             : "No Reserved Cards"}
+        </Box>
+      </Modal>
+      <Modal open={reduceOpen} onClose={reduceHandleClose}>
+        <Box className="modalStyle">
+          your temp jewels, click on some until less than equal to 10, and add
+          those to bag, cannot move forward until done so Still need to remove
+          {count}
+          {whatIHave.map((jewel, id) => (
+            <div onClick={() => addJewel(jewel)} key={id}>
+              {jewel}
+            </div>
+          ))}
+          Removing:
+          {pot.map((item, index) => {
+            // TODO: improve look, not all in a vertical line
+            return item
+          })}
+          <Button onClick={() => removeExtras()}>Remove these</Button>
         </Box>
       </Modal>
     </div>
