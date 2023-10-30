@@ -160,7 +160,34 @@ export function Board(props) {
       return temp
     }
   }
-
+  function scrollHelper() {
+    toast.info("giving scroll to opponent")
+    if (currPlayer === 2) {
+      if (scrollZone > 0) {
+        dispatch(takeScrollZone())
+        dispatch(addScroll())
+        socket.emit("scroll-card", { take: 0, give: 1, tell: true })
+      } else if (p2Scrolls > 0) {
+        dispatch(takeScroll2())
+        dispatch(addScroll())
+        socket.emit("scroll-card", { take: 2, give: 1, tell: true })
+      } else {
+        toast.error("Cannot take any scrolls")
+      }
+    } else {
+      if (scrollZone > 0) {
+        dispatch(takeScrollZone())
+        dispatch(addScroll2())
+        socket.emit("scroll-card", { take: 0, give: 2, tell: true })
+      } else if (p1Scrolls > 0) {
+        dispatch(takeScroll())
+        dispatch(addScroll2())
+        socket.emit("scroll-card", { take: 1, give: 2, tell: true })
+      } else {
+        toast.error("Cannot take any scrolls")
+      }
+    }
+  }
   function handleFill() {
     if (currPlayer === startingInfo[0]) {
       if (data.length) {
@@ -169,6 +196,7 @@ export function Board(props) {
         dispatch(emptyBag())
         dispatch(setBoard(final))
         socket.emit("fill-board", { board: final })
+        scrollHelper()
       }
     } else {
       toast.error("not your turn")
@@ -200,32 +228,7 @@ export function Board(props) {
         (takeThese[0] === takeThese[1] && takeThese[1] === takeThese[2]) ||
         filtered.length === 2
       ) {
-        toast.info("giving scroll to opponent")
-        if (currPlayer === 2) {
-          if (scrollZone > 0) {
-            dispatch(takeScrollZone())
-            dispatch(addScroll())
-            socket.emit("scroll-card", { take: 0, give: 1, tell: true })
-          } else if (p2Scrolls > 0) {
-            dispatch(takeScroll2())
-            dispatch(addScroll())
-            socket.emit("scroll-card", { take: 2, give: 1, tell: true })
-          } else {
-            toast.error("Cannot take any scrolls")
-          }
-        } else {
-          if (scrollZone > 0) {
-            dispatch(takeScrollZone())
-            dispatch(addScroll2())
-            socket.emit("scroll-card", { take: 0, give: 2, tell: true })
-          } else if (p1Scrolls > 0) {
-            dispatch(takeScroll())
-            dispatch(addScroll2())
-            socket.emit("scroll-card", { take: 1, give: 2, tell: true })
-          } else {
-            toast.error("Cannot take any scrolls")
-          }
-        }
+        scrollHelper()
       }
       socket.emit("remove-this", { pot: pot, takeThese: takeThese })
       currPlayer === 1

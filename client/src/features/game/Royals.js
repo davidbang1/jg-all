@@ -171,7 +171,7 @@ export function Royals() {
       Royals
       <br />
       {royalData}
-      <button onClick={openModal}>Royals test</button>
+      {/* <button onClick={openModal}>Royals test</button> */}
       <JewelsModal
         open={open}
         handleClose={handleClose}
