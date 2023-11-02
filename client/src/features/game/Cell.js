@@ -7,6 +7,7 @@ import { startReserve } from "./cardsSlice"
 import { toast } from "react-toastify"
 import { socket } from "../../app/hooks/socket"
 import "../index.css"
+import "./board.css"
 
 function Cell(props) {
   const dispatch = useDispatch()

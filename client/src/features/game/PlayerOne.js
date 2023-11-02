@@ -18,7 +18,7 @@ export function PlayerOne(props) {
   const playerPermaJewels = useSelector((state) => state.playerOne.permaJewels)
   const playerScrolls = useSelector((state) => state.playerOne.scrolls)
   const [bText, setBText] = useState("Use Scroll")
-  const [open, setOpen] = useState(false)
+  const [RCOpen, setRCOpen] = useState(false)
   const [reduceOpen, setReduceOpen] = useState(false)
   const reservedCards = useSelector((state) => state.playerOne.reservedCards)
   const startingInfo = useSelector((state) => state.home.info)
@@ -57,11 +57,11 @@ export function PlayerOne(props) {
   function handleClose() {
     dispatch(clearStatus())
     dispatch(clearStatus2())
-    setOpen(false)
+    setRCOpen(false)
   }
   function reduceHandleClose() {
     //shouldn't be able to close
-    // setReduceOpen(false)
+    setReduceOpen(false)
   }
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export function PlayerOne(props) {
   }, [playerStatus])
 
   function viewCards() {
-    setOpen(true)
+    setRCOpen(true)
   }
   useEffect(() => {
     //reset button text after successful use of scroll
@@ -82,7 +82,7 @@ export function PlayerOne(props) {
   function removeCard(i) {
     dispatch(removeReserved(i))
     socket.emit("remove-reserved", { index: i })
-    setOpen(false)
+    setRCOpen(false)
   }
   function addJewel(item) {
     if (item[1] > 0 && count > 0) {
@@ -171,9 +171,9 @@ export function PlayerOne(props) {
         <div key={id}>{jewel}</div>
       ))}
       <Modal
-        open={open}
+        open={RCOpen}
         onClose={handleClose}
-        aria-labelledby="modal-modal-title"
+        aria-labelledby="reserved-cards-modal"
         aria-describedby="modal-modal-description"
       >
         <Box className="modalStyle">
@@ -198,7 +198,11 @@ export function PlayerOne(props) {
             : "No Reserved Cards"}
         </Box>
       </Modal>
-      <Modal open={reduceOpen} onClose={reduceHandleClose}>
+      <Modal
+        open={reduceOpen}
+        onClose={reduceHandleClose}
+        aria-labelledby="extra-jewels-modal"
+      >
         <Box className="modalStyle">
           your temp jewels, click on some until less than equal to 10, and add
           those to bag, cannot move forward until done so Still need to remove

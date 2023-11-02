@@ -21,6 +21,7 @@ import { socket } from "../../app/hooks/socket"
 import { toast } from "react-toastify"
 import { addScrollZone, takeScrollZone } from "./scrollSlice"
 import { setStatus } from "./cardsSlice.js"
+import "./board.css"
 
 export function Board(props) {
   const dispatch = useDispatch()
@@ -255,7 +256,7 @@ export function Board(props) {
       <button aria-label="take-board" onClick={() => takeJewels()}>
         Take
       </button>
-      <table>
+      <table className="board">
         <tbody>
           {grid
             .reduce(function (rows, key, index) {

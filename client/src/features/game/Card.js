@@ -327,9 +327,10 @@ export function Card(props) {
       if (check) {
         if (props.special === "wild" || props.color === "wild") {
           wildAction()
-        } else if (props.special === "steal") {
+        } else if (props.special === "steal" || props.special === "none") {
           stealAction()
-          regularCardAction()
+          //wait for this???
+          //regularCardAction()
         } else if (props.special === "scroll") {
           scrollAction()
           regularCardAction()
@@ -339,7 +340,7 @@ export function Card(props) {
             dispatch(setGem([props.color, props.index, cart]))
             toast.info("Pick a " + props.color + " gem from the board")
           } else {
-            toast.info("Gem cannot be used right now")
+            toast.info("There are no gems on the board for you")
             regularCardAction()
           }
         } else if (props.special === "again") {
@@ -414,6 +415,7 @@ export function Card(props) {
         cost={cart}
         removeCard={props.removeCard}
         index={props.index}
+        regularCardAction={regularCardAction}
       />
       <Modal
         open={open}

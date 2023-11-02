@@ -10,9 +10,7 @@ import {
   checkWin,
 } from "./playerOneSlice"
 import { addCard2, payJewels2, checkWin2, getJewel2 } from "./playerTwoSlice"
-import { toast } from "react-toastify"
 import { setRoyalAction } from "./royalSlice"
-import { useEffect } from "react"
 
 export function JewelsModal(props) {
   const dispatch = useDispatch()
@@ -29,12 +27,10 @@ export function JewelsModal(props) {
       dispatch(getJewel2([x.jewel]))
     }
   })
-  // useEffect(() => {
-  //   handleClick(props.action)
-  // }, [props.action])
+
   function handleClick(jewel) {
     if (props.action === "steal") {
-      if (currPlayer === 2) {
+      if (currPlayer === 1) {
         dispatch(payJewels2([jewel]))
         dispatch(getJewel([jewel]))
         socket.emit("steal-jewel", { jewel: jewel, currPlayer: 2 })
@@ -44,6 +40,7 @@ export function JewelsModal(props) {
         socket.emit("steal-jewel", { jewel: jewel, currPlayer: 1 })
       }
       props.handleClose()
+      props.regularCardAction()
     } else if (props.action === "colorless") {
       let obj = JSON.parse(JSON.stringify(props.extra))
       obj.color = jewel

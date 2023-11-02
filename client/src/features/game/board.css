@@ -1,0 +1,10 @@
+.board {
+  /* background-color: grey; */
+  text-align: center;
+}
+
+.cell {
+  min-width: 75px;
+  height: 75px;
+  text-align: center;
+}

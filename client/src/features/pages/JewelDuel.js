@@ -11,7 +11,7 @@ import { Scrolls } from "../game/Scrolls"
 import { Royals } from "../game/Royals"
 import useScript from "../../app/hooks/useScript" //delete useScript
 import { socket } from "../../app/hooks/socket"
-import { removeRoyal, setRoom } from "../game/playerOneSlice"
+import { removeRoyal, setRoom, setCurrPlayer } from "../game/playerOneSlice"
 import { toast } from "react-toastify"
 import { Button, Modal, Box } from "@mui/material"
 import { useNavigate } from "react-router-dom"
@@ -51,7 +51,9 @@ export function JewelDuel(props) {
     navigate("/")
     window.location.reload()
   }
-
+  function skipTurn() {
+    dispatch(setCurrPlayer())
+  }
   useEffect(() => {
     if (p1Status === "win" || p2Status === "win") {
       setOpen(true)
@@ -85,6 +87,7 @@ export function JewelDuel(props) {
             {remotePeer} is player 2 <br />
             You are Player {startingInfo[0]}
             <br />
+            <button onClick={() => skipTurn()}>skip two</button>
           </Grid>
           <Grid item xs={4}>
             <Cards

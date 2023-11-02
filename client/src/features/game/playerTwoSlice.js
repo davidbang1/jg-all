@@ -15,9 +15,9 @@ const initialState = {
   },
   jewels: {
     white: 0,
-    blue: 0,
+    blue: 2,
     green: 0,
-    red: 0,
+    red: 2,
     black: 0,
     pearl: 0,
     gold: 0,
@@ -89,7 +89,7 @@ export const playerTwoSlice = createSlice({
       if (x.payload === 2) {
         //check num jewels
         if (Object.values(state.jewels).reduce((a, b) => a + b, 0) > 10) {
-          toast.error("You have too many jewels, get rid of some")
+          // toast.error("You have too many jewels, get rid of some")
           state.status = "reduce"
         }
         if (state.crowns >= 10 || state.totalPoints >= 20 || maxP >= 10) {
