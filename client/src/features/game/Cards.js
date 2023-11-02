@@ -75,6 +75,7 @@ export function Cards(props) {
     dispatch(setCurrPlayer())
     toast.info("opponent goes again")
   })
+
   socket.off("buy-card2")
   socket.on("buy-card2", (x) => {
     dispatch(addToBag(x.cart))

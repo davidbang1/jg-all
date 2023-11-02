@@ -49,18 +49,16 @@ function Cell(props) {
   }
 
   function handleClick(pot) {
-    //TODO Fix clicking between gold and pink
     if (currPlayer === startingInfo[0]) {
       if (props.action === "gem") {
         if (currGem[0] === props.jewel) {
           toast.success("Added to jewels")
-          props.giveGem(props.jewel, props.number, currGem)
+          props.giveGem(props.jewel, props.number, currGem, currGem[3]) //add flag for from player
           props.setAction("")
         } else {
           toast.error("Needs to be " + currGem[0])
         }
-      }
-      if (props.action === "scroll") {
+      } else if (props.action === "scroll") {
         if (props.jewel && props.jewel !== "gold") {
           if (currPlayer === 1) {
             dispatch(props.getJewel([props.jewel]))

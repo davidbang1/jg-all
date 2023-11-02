@@ -23,7 +23,7 @@ import {
 } from "./playerTwoSlice"
 import { addToBag } from "./bagSlice"
 import { takeScrollZone } from "./scrollSlice"
-import { setGem } from "./cardsSlice"
+import { setGem, setStatus } from "./cardsSlice"
 import { toast } from "react-toastify"
 import crown from "../assets/crown.png"
 import crown2 from "../assets/crown2.jpeg"
@@ -66,7 +66,8 @@ export function Card(props) {
   }, [playerJewels, playerJewels2])
 
   useEffect(() => {
-    if (cardsStatus[1] === props.index) {
+    //comes from gem pick, function to buy a card
+    if (cardsStatus && cardsStatus[1] === props.index) {
       dispatch(addToBag(cardsStatus[2]))
       if (currPlayer === 1) {
         dispatch(payJewels(cardsStatus[2]))
@@ -85,6 +86,7 @@ export function Card(props) {
         index: props.index,
         reserved: props.reserved,
       })
+      dispatch(setStatus([]))
     }
   }, [cardsStatus])
 
@@ -327,17 +329,17 @@ export function Card(props) {
       if (check) {
         if (props.special === "wild" || props.color === "wild") {
           wildAction()
-        } else if (props.special === "steal" || props.special === "none") {
+        } else if (props.special === "steal") {
           stealAction()
-          //wait for this???
-          //regularCardAction()
+          //regularcardaction is in jewels modal
         } else if (props.special === "scroll") {
           scrollAction()
           regularCardAction()
         } else if (props.special === "gem") {
           if (bs.includes(props.color)) {
             props.setAction("gem")
-            dispatch(setGem([props.color, props.index, cart]))
+            dispatch(setGem([props.color, props.index, cart, props.fromPlayer]))
+            props.handleClose()
             toast.info("Pick a " + props.color + " gem from the board")
           } else {
             toast.info("There are no gems on the board for you")

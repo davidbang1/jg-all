@@ -2,12 +2,25 @@ import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { clearBoard } from "./boardSlice"
 import { Button, Modal, Box } from "@mui/material"
-import { clearStatus } from "./playerOneSlice"
-import { clearStatus2, removeReserved2, payJewels2 } from "./playerTwoSlice"
+import {
+  clearStatus,
+  payJewels,
+  addCard,
+  checkWin,
+  setCurrPlayer,
+} from "./playerOneSlice"
+import {
+  clearStatus2,
+  addCard2,
+  payJewels2,
+  checkWin2,
+  removeReserved2,
+} from "./playerTwoSlice"
 import { Card } from "../game/Card"
 import { addToBag } from "./bagSlice"
 import { socket } from "../../app/hooks/socket"
 import { toast } from "react-toastify"
+import { setStatus } from "./cardsSlice"
 
 export function PlayerTwo(props) {
   const dispatch = useDispatch()
@@ -22,6 +35,8 @@ export function PlayerTwo(props) {
   const playerStatus = useSelector((state) => state.playerTwo.status)
   const [pot, setPot] = useState([])
   const [reduceOpen, setReduceOpen] = useState(false)
+  const cardsStatus = useSelector((state) => state.cards.status2)
+  const currPlayer = useSelector((state) => state.playerOne.currPlayer)
 
   const [bText, setBText] = useState("Use Scroll")
   const [open, setOpen] = useState(false)
@@ -105,6 +120,30 @@ export function PlayerTwo(props) {
     setBText("Use Scroll")
   }, [playerScrolls])
 
+  useEffect(() => {
+    if (cardsStatus[3] === 2) {
+      dispatch(addToBag(cardsStatus[2]))
+      if (currPlayer === 1) {
+        dispatch(payJewels(cardsStatus[2]))
+        dispatch(addCard(reservedCards[0]))
+      } else {
+        dispatch(payJewels2(cardsStatus[2]))
+        dispatch(addCard2(reservedCards[0]))
+      }
+      dispatch(setCurrPlayer())
+      dispatch(checkWin(startingInfo[0]))
+      dispatch(checkWin2(startingInfo[0]))
+      removeCard()
+      socket.emit("buy-card", {
+        cart: cardsStatus[2],
+        props: reservedCards[0],
+        index: props.index,
+        reserved: true,
+      })
+      dispatch(setStatus([]))
+    }
+  }, [cardsStatus])
+
   function viewCards() {
     setOpen(true)
   }
@@ -184,6 +223,8 @@ export function PlayerTwo(props) {
                     action={props.action}
                     setAction={props.setAction}
                     reserved={true}
+                    fromPlayer={2}
+                    handleClose={handleClose}
                   />
                 )
               })

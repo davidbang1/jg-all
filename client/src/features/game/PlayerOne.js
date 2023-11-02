@@ -1,13 +1,21 @@
 import { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { clearBoard } from "./boardSlice"
-import { clearStatus, removeReserved, payJewels } from "./playerOneSlice"
-import { clearStatus2 } from "./playerTwoSlice"
+import {
+  clearStatus,
+  removeReserved,
+  payJewels,
+  addCard,
+  checkWin,
+  setCurrPlayer,
+} from "./playerOneSlice"
+import { clearStatus2, addCard2, payJewels2, checkWin2 } from "./playerTwoSlice"
 import { Modal, Box, Button } from "@mui/material"
 import { toast } from "react-toastify"
 import { Card } from "../game/Card"
 import { socket } from "../../app/hooks/socket"
 import { addToBag } from "./bagSlice"
+import { setStatus } from "./cardsSlice"
 
 export function PlayerOne(props) {
   const dispatch = useDispatch()
@@ -24,6 +32,8 @@ export function PlayerOne(props) {
   const startingInfo = useSelector((state) => state.home.info)
   const playerStatus = useSelector((state) => state.playerOne.status)
   const [pot, setPot] = useState([])
+  const cardsStatus = useSelector((state) => state.cards.status2)
+  const currPlayer = useSelector((state) => state.playerOne.currPlayer)
 
   const tempJewels = Object.entries(playerJewels)
   const [whatIHave, setWhatIHave] = useState(
@@ -71,6 +81,30 @@ export function PlayerOne(props) {
     }
   }, [playerStatus])
 
+  useEffect(() => {
+    if (cardsStatus[3] === 1) {
+      dispatch(addToBag(cardsStatus[2]))
+      if (currPlayer === 1) {
+        dispatch(payJewels(cardsStatus[2]))
+        dispatch(addCard(reservedCards[0]))
+      } else {
+        dispatch(payJewels2(cardsStatus[2]))
+        dispatch(addCard2(reservedCards[0]))
+      }
+      dispatch(setCurrPlayer())
+      dispatch(checkWin(startingInfo[0]))
+      dispatch(checkWin2(startingInfo[0]))
+      removeCard()
+      socket.emit("buy-card", {
+        cart: cardsStatus[2],
+        props: reservedCards[0],
+        index: props.index,
+        reserved: true,
+      })
+      dispatch(setStatus([]))
+    }
+  }, [cardsStatus])
+
   function viewCards() {
     setRCOpen(true)
   }
@@ -90,7 +124,6 @@ export function PlayerOne(props) {
       for (let j = 0; j < tempHave.length; j++) {
         if (tempHave[j][0] === item[0]) {
           tempHave[j][1] -= 1
-          // setCount(count - 1)
         }
       }
       let tempCart = pot
@@ -101,16 +134,14 @@ export function PlayerOne(props) {
   }
 
   function removeExtras() {
-    //dispatch add to bag. remove from player
+    //add to bag, remove from player
     if (count <= 0) {
       dispatch(addToBag(pot))
       dispatch(payJewels(pot))
       for (let i = 0; i < pot.length; i++) {
         tempJewels[pot[i]] -= 1
       }
-      //emit
       socket.emit("remove-extra", { pot: pot })
-      //clear pot
       setPot([])
       setReduceOpen(false)
       dispatch(clearStatus())
@@ -123,9 +154,7 @@ export function PlayerOne(props) {
     //cancel scroll use
     if (playerScrolls > 0) {
       if (bText === "Use Scroll") {
-        //enter scroll using state
         props.setAction("scroll")
-        //clear board highlights
         dispatch(clearBoard("clean"))
         setBText("Cancel Scroll")
       } else {
@@ -192,6 +221,8 @@ export function PlayerOne(props) {
                     action={props.action}
                     setAction={props.setAction}
                     reserved={true}
+                    fromPlayer={1}
+                    handleClose={handleClose}
                   />
                 )
               })

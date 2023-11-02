@@ -127,7 +127,7 @@ export function Board(props) {
       ? dispatch(getJewel([jewel]))
       : dispatch(getJewel2([jewel]))
     socket.emit("gem-picked", { jewel: jewel, ind: number })
-    dispatch(setStatus([jewel, cardInfo[1], cardInfo[2]]))
+    dispatch(setStatus([jewel, cardInfo[1], cardInfo[2], cardInfo[3]]))
   }
 
   function removeThis(x) {
