@@ -71,12 +71,11 @@ export function JewelDuel(props) {
       </header>
       <div>
         <Grid container>
-          <Grid item xs={2}>
+          <Grid item xs={4}>
             <PlayerOne action={props.action} setAction={props.setAction} />
-          </Grid>
-          <Grid item xs={2}>
             <PlayerTwo action={props.action} setAction={props.setAction} />
           </Grid>
+
           <Grid item xs={4}>
             <Bag />
             <Board action={props.action} setAction={props.setAction} />

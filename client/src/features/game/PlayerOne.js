@@ -16,6 +16,8 @@ import { Card } from "../game/Card"
 import { socket } from "../../app/hooks/socket"
 import { addToBag } from "./bagSlice"
 import { setStatus } from "./cardsSlice"
+import "./player.css"
+import "../index.css"
 
 export function PlayerOne(props) {
   const dispatch = useDispatch()
@@ -61,7 +63,7 @@ export function PlayerOne(props) {
   socket.on("remove-extra2", (x) => {
     dispatch(addToBag(x.pot))
     dispatch(payJewels(x.pot))
-    toast.success("paid jewels")
+    toast.success("Opponent removed extra jewels")
   })
 
   function handleClose() {
@@ -76,7 +78,6 @@ export function PlayerOne(props) {
 
   useEffect(() => {
     if (playerStatus === "reduce") {
-      toast.info("remove thing")
       setReduceOpen(true)
     }
   }, [playerStatus])
@@ -170,35 +171,52 @@ export function PlayerOne(props) {
   const myPoints = Object.entries(playerPoints)
 
   return (
-    <div>
-      <button id="scroll-button1" onClick={handleClick}>
-        {bText}
-      </button>
-      <br />
-      Player One
-      <br />
-      Points:
-      {myPoints.map((point, id) => (
-        <div key={id}>{point}</div>
-      ))}
-      Total: {playerTotalPoints}
-      <br />
-      Crowns: {playerCrowns}
-      <br />
-      Scrolls: {playerScrolls}
-      <br />
-      <button id="reserved-cards1" onClick={viewCards}>
-        View Reserved Cards {reservedCards.length}
-      </button>
-      <br />
-      <b>Permanent Jewels:</b>
-      {myPerms.map((jewel, id) => (
-        <div key={id}>{jewel}</div>
-      ))}
-      <b>Jewels:</b>
-      {tempJewels.map((jewel, id) => (
-        <div key={id}>{jewel}</div>
-      ))}
+    <div className="player__zone">
+      <div className="left">
+        Player One <br />
+        Points:
+        {myPoints.map((point, id) => {
+          if (point[1] !== 0) return <div key={id}>{point}</div>
+          return <div></div>
+        })}
+        Total: {playerTotalPoints}
+        <br />
+        Crowns: {playerCrowns}
+        <br />
+        Scrolls: {playerScrolls}
+        <br />
+        <button id="scroll-button1" onClick={handleClick}>
+          {bText}
+        </button>
+        <br />
+        <button id="reserved-cards1" onClick={viewCards}>
+          View Reserved Cards {reservedCards.length}
+        </button>
+      </div>
+      <div className="right">
+        <h5>Permanent Jewels:</h5>
+        {myPerms.map((jewel, id) => {
+          if (jewel[1] !== 0)
+            return (
+              <span className={jewel[0] + " player__jewels"} key={id}>
+                {jewel[1]}
+              </span>
+            )
+          return <div></div>
+        })}
+        <br />
+        <b>Jewels:</b>
+        <br />
+        {tempJewels.map((jewel, id) => {
+          if (jewel[1] !== 0)
+            return (
+              <span className={jewel[0] + " player__jewels"} key={id}>
+                {jewel[1]}
+              </span>
+            )
+          return <div></div>
+        })}
+      </div>
       <Modal
         open={RCOpen}
         onClose={handleClose}

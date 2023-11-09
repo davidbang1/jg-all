@@ -20,10 +20,10 @@ export function Royals() {
   const royalData = useSelector((state) => state.playerOne.royals)
   const p1Royals = useSelector((state) => state.playerOne.getRoyal)
   const p2Royals = useSelector((state) => state.playerTwo.getRoyal2)
-  const p1gotFirst = useSelector((state) => state.playerOne.gotFirst)
-  const p2gotFirst = useSelector((state) => state.playerTwo.gotFirst2)
-  const p1gotSecond = useSelector((state) => state.playerOne.gotSecond)
-  const p2gotSecond = useSelector((state) => state.playerTwo.gotSecond2)
+  // const p1gotFirst = useSelector((state) => state.playerOne.gotFirst)
+  // const p2gotFirst = useSelector((state) => state.playerTwo.gotFirst2)
+  // const p1gotSecond = useSelector((state) => state.playerOne.gotSecond)
+  // const p2gotSecond = useSelector((state) => state.playerTwo.gotSecond2)
 
   const royalAction = useSelector((state) => state.royal.royalAction)
   const currPlayer = useSelector((state) => state.playerOne.currPlayer)
@@ -44,6 +44,7 @@ export function Royals() {
     toast.success("Go again!")
     socket.emit("again-royal")
   }
+  console.log("royals")
 
   function stealAction() {
     setJMAction("steal")
@@ -62,8 +63,9 @@ export function Royals() {
       }
     }
     if (temp.length > 0) {
-      setJMJewels(temp)
-      setOpen(true)
+      // setJMJewels(temp)
+      setJMJewels(() => temp)
+      setOpen(() => !open)
     } else {
       toast.success(
         "Achievement: Kick 'em while they're down: You tried to steal when they had nothing",
@@ -121,7 +123,7 @@ export function Royals() {
   useEffect(() => {
     if (royalAction === "steal") {
       stealAction()
-      addHelper(2, "steal")
+      // addHelper(2, "steal")
     } else if (royalAction === "again") {
       dispatch(setCurrPlayer())
       goAgain()

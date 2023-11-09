@@ -118,7 +118,7 @@ function Cell(props) {
         }
       }
     } else {
-      toast.error("not your turn")
+      toast.error("Not your turn")
     }
   }
 

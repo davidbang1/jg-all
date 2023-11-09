@@ -15,9 +15,9 @@ const initialState = {
   },
   jewels: {
     white: 0,
-    blue: 2,
+    blue: 0,
     green: 0,
-    red: 2,
+    red: 0,
     black: 0,
     pearl: 0,
     gold: 0,
